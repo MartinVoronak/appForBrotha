@@ -15,7 +15,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".addProfile"></activity>
+        <activity android:name=".ColorPicker" />
+        <activity android:name=".AddProfile"></activity>
     </application>
 
 </manifest>
