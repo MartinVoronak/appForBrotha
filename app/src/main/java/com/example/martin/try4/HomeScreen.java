@@ -60,9 +60,9 @@ public class HomeScreen extends AppCompatActivity {
 
         floatingActionButton1.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent i = new Intent(HomeScreen.this, AddProfile.class);
+                Intent i = new Intent(HomeScreen.this, WorkingEdit.class);
                 startActivity(i);
-
+                finish();
             }
         });
     }

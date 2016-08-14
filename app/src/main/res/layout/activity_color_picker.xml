@@ -9,4 +9,46 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.martin.try4.ColorPicker">
 
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Button"
+        android:id="@+id/button1"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:background="#0066ff"
+        android:clickable="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Button"
+        android:id="@+id/button2"
+        android:layout_above="@+id/button3"
+        android:layout_alignStart="@+id/button1"
+        android:layout_marginBottom="60dp"
+        android:background="#ff4000"
+        android:clickable="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Button"
+        android:id="@+id/button3"
+        android:layout_centerVertical="true"
+        android:layout_alignStart="@+id/button2"
+        android:background="#79ff4d"
+        android:clickable="true" />
+
+    <EditText
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/editText"
+        android:layout_below="@+id/button3"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="58dp"
+        android:text="hi"
+        android:background="#f76278" />
+
 </RelativeLayout>

@@ -16,7 +16,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".ColorPicker" />
-        <activity android:name=".AddProfile"></activity>
+        <activity android:name=".AddNewProfile" />
+        <activity android:name=".WorkingEdit"></activity>
     </application>
 
 </manifest>
