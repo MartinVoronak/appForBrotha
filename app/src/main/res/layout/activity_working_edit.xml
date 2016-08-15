@@ -43,20 +43,21 @@
             android:id="@+id/textView3"
             android:gravity="center"
             android:background="@drawable/rounded_textview"
-            android:layout_weight="0.00" />
+            android:layout_weight="0.00"
+            android:paddingBottom="0dp" />
 
         <FrameLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:fillViewport="true"
             android:layout_weight="1"
-            >
+            android:paddingTop="0dp">
 
             <ListView
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:id="@+id/mylistView"
-                />
+                android:paddingTop="4dp" />
 
             <android.support.design.widget.FloatingActionButton
                 android:id="@+id/fabWE"
@@ -64,6 +65,19 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|end"
                 android:src="@drawable/plus"
+
+                android:layout_marginBottom="11dp"
+                android:layout_marginLeft="11dp"
+                android:layout_marginRight="11dp"
+
+                />
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fabWE2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|bottom|end"
+                android:src="@drawable/checkmark"
 
                 android:layout_marginBottom="11dp"
                 android:layout_marginLeft="11dp"

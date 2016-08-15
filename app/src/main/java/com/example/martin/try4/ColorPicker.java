@@ -46,7 +46,7 @@ public class ColorPicker extends AppCompatActivity {
             public void onClick(View v) {
 
                 Intent i = new Intent();
-                i.putExtra("picked",color2);
+                i.putExtra("picked",color3);
                 setResult(RESULT_OK, i);
                 finish();
             }

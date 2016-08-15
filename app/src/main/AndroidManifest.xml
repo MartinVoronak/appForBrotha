@@ -16,8 +16,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".ColorPicker" />
-        <activity android:name=".AddNewProfile" />
-        <activity android:name=".WorkingEdit"></activity>
+        <activity android:name=".WorkingEdit"
+            android:configChanges="orientation|screenSize|keyboard">
+
+        </activity>
     </application>
 
 </manifest>

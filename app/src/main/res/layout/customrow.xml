@@ -2,13 +2,15 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="fill_parent"
     android:layout_height="match_parent"
-    android:background="#fafafa"
-    android:weightSum="1">
+    android:background="#000000"
+    android:weightSum="1"
+    android:paddingTop="4dp"
+    android:paddingBottom="4dp">
 
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="62dp"
+        android:layout_height="58dp"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Large Text"
         android:id="@+id/listID"
@@ -16,6 +18,8 @@
         android:textSize="26dp"
         android:gravity="center"
         android:tag="bo"
-        />
+        android:background="@drawable/rounded_textview2"
+        android:paddingTop="4dp"
+        android:paddingBottom="0dp" />
 
 </LinearLayout>

@@ -1,6 +1,8 @@
 package com.example.martin.try4;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,6 +15,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.util.ArrayList;
+
 public class HomeScreen extends AppCompatActivity {
 
     private static final String TAG = "MyActivity";
@@ -24,36 +29,7 @@ public class HomeScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_screen);
-
-        JSONObject JSONRootObject = new JSONObject();
-        JSONArray jsonRootArray = new JSONArray();
-
-        try {
-            JSONArray JSColors = new JSONArray();
-            JSColors.put("AAAAAA");
-            JSColors.put("BBBBBB");
-
-            JSONObject js1 = new JSONObject().put("profile1", JSColors);
-            jsonRootArray.put(js1);
-
-
-            JSONArray JSColors2 = new JSONArray();
-            JSColors2.put("CCCCCC");
-            JSColors2.put("DDDDDD");
-            JSColors2.put("EEEEEE");
-
-            JSONObject js2 = new JSONObject().put("profile2", JSColors2);
-            jsonRootArray.put(js2);
-
-            JSONRootObject.put("data",jsonRootArray);
-
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        Log.i(TAG,"vytvoreny json "+JSONRootObject.toString());
-
+        Log.i(TAG, "---------------------------------------------------------------------------------------------------------");
 
         materialDesignFAM = (FloatingActionMenu) findViewById(R.id.material_design_android_floating_action_menu);
         floatingActionButton1 = (FloatingActionButton) findViewById(R.id.material_design_floating_action_menu_item1);
@@ -62,8 +38,32 @@ public class HomeScreen extends AppCompatActivity {
             public void onClick(View v) {
                 Intent i = new Intent(HomeScreen.this, WorkingEdit.class);
                 startActivity(i);
-                finish();
             }
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();  // Always call the superclass method first
+        Log.i(TAG,"HS RESUMED");
+
+        SharedPreferences prefs = getSharedPreferences("MyPrefsFile", MODE_PRIVATE);
+        String restoredText = prefs.getString("savedData", null);
+        if (restoredText != null) {
+            Log.i(TAG,"HS Savenuty JSON: "+restoredText);
+        }
+
+        try {
+            JSONObject  jsonRootObjectDeserialization = new JSONObject(restoredText);
+            JSONArray jsonArrayDeserialization = jsonRootObjectDeserialization.optJSONArray("data");
+            Log.i(TAG,"HS deserializacia 1: "+jsonArrayDeserialization.toString());
+
+            for(int i=0; i < jsonArrayDeserialization.length(); i++) {
+                JSONObject jsonObject = jsonArrayDeserialization.getJSONObject(i);
+                Log.i(TAG,"HS deserializacia 2: "+jsonObject.toString());
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }
