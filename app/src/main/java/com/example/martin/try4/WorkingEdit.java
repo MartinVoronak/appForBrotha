@@ -71,8 +71,10 @@ public class WorkingEdit extends AppCompatActivity {
                                 SharedPreferences prefs = getSharedPreferences("MyPrefsFile", MODE_PRIVATE);
                                 String restoredText = prefs.getString("savedData", null);
 
-                                JSONObject  jsonRootObjectDeserialization = new JSONObject(restoredText);
-                                jsonArrayDeserialization = jsonRootObjectDeserialization.optJSONArray("data");
+                                if (restoredText!=null){
+                                    JSONObject  jsonRootObjectDeserialization = new JSONObject(restoredText);
+                                    jsonArrayDeserialization = jsonRootObjectDeserialization.optJSONArray("data");
+                                }
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -84,7 +86,9 @@ public class WorkingEdit extends AppCompatActivity {
 
                     try {
                         //json object to be saved
-                        JSONObject js1 = new JSONObject().put(editText.getText().toString(), JSColors);
+                        JSONObject js1 = new JSONObject();
+                        js1.put("name", editText.getText().toString());
+                        js1.put("colors", JSColors);
                         //jsonroot array to be modified
                         jsonArrayDeserialization.put(js1);
 
@@ -93,7 +97,6 @@ public class WorkingEdit extends AppCompatActivity {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                    //TODO : vytiahnut json, spravit novy a uplny s novym profilom a tak savenut
 
                     SharedPreferences.Editor editor = getSharedPreferences("MyPrefsFile", MODE_PRIVATE).edit();
                     editor.putString("savedData", JSONRootObject.toString());

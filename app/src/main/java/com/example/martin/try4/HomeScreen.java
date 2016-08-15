@@ -40,6 +40,19 @@ public class HomeScreen extends AppCompatActivity {
                 startActivity(i);
             }
         });
+
+        floatingActionButton2 = (FloatingActionButton) findViewById(R.id.material_design_floating_action_menu_item2);
+
+        floatingActionButton2.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                SharedPreferences.Editor editor = getSharedPreferences("MyPrefsFile", MODE_PRIVATE).edit();
+                editor.clear();
+                editor.commit();
+
+            }
+        });
+
+        SharedPreferences.Editor editor = getSharedPreferences("MyPrefsFile", MODE_PRIVATE).edit();
     }
 
     @Override
@@ -51,19 +64,37 @@ public class HomeScreen extends AppCompatActivity {
         String restoredText = prefs.getString("savedData", null);
         if (restoredText != null) {
             Log.i(TAG,"HS Savenuty JSON: "+restoredText);
+
+            try {
+                JSONObject  jsonRootObjectDeserialization = new JSONObject(restoredText);
+                JSONArray jsonArrayDeserialization = jsonRootObjectDeserialization.optJSONArray("data");
+                Log.i(TAG,"HS deserializacia 0: "+jsonArrayDeserialization.length());
+                Log.i(TAG, "HS deserializacia 1: " + jsonArrayDeserialization.toString());
+
+                    for(int i=0; i < jsonArrayDeserialization.length(); i++) {
+                        JSONObject jsonObject = jsonArrayDeserialization.getJSONObject(i);
+                        Log.i(TAG,"HS deserializacia 2: "+jsonObject.toString());
+
+                        String name = jsonObject.optString("name").toString();
+                        Log.i(TAG,"HS deserializacia name 3: "+name);
+
+                        JSONArray jsonArrayColors = jsonObject.getJSONArray("colors");
+                        Log.i(TAG,"HS deserializacia colors 3: "+jsonArrayColors.toString());
+
+                            for(int j=0; j < jsonArrayColors.length(); j++) {
+                                //JSONObject jsonColor = jsonArrayColors.getJSONObject(j);
+                                //Log.i(TAG,"HS deserializacia colors 3: "+jsonColor);
+                                String color = jsonArrayColors.get(j).toString();
+                                Log.i(TAG,"HS deserializacia color 4: "+color);
+                            }
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
         }
 
-        try {
-            JSONObject  jsonRootObjectDeserialization = new JSONObject(restoredText);
-            JSONArray jsonArrayDeserialization = jsonRootObjectDeserialization.optJSONArray("data");
-            Log.i(TAG,"HS deserializacia 1: "+jsonArrayDeserialization.toString());
 
-            for(int i=0; i < jsonArrayDeserialization.length(); i++) {
-                JSONObject jsonObject = jsonArrayDeserialization.getJSONObject(i);
-                Log.i(TAG,"HS deserializacia 2: "+jsonObject.toString());
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+
     }
 }
