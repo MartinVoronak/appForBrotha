@@ -6,6 +6,9 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -45,6 +48,7 @@ public class SingleProfile extends AppCompatActivity {
 
         editTextSP = (TextView)findViewById(R.id.editTextSP);
         editTextSP.setText(profile.getObjectName());
+        //editTextSP.setSelected(false);
 
         list = (ListView) findViewById(R.id.mylistViewSP);
         cAdapter = new CustomAdapter(this, profile.getArrayList());
@@ -119,7 +123,6 @@ public class SingleProfile extends AppCompatActivity {
                 Log.i(TAG, "prenesena farba: " + pickedColor);
 
                 arrayList.add(pickedColor);
-                //list.setAdapter(cAdapter);  //used to be like this
                 cAdapter = new CustomAdapter(this, arrayList);
                 list.setAdapter(cAdapter);
 
@@ -128,5 +131,51 @@ public class SingleProfile extends AppCompatActivity {
             }
         }
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menudelete, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        profiles.remove(objectID);
+
+        JSONArray jsonArrayDeserialization= new JSONArray();
+
+        for (int j=0;j<profiles.size();j++)
+        {
+            JSONArray JSColors = new JSONArray();
+            JSONObject JSONRootObject = new JSONObject();
+
+            for (int i = 0; i < profiles.get(j).getArrayList().size(); i++){
+                JSColors.put(profiles.get(j).getArrayList().get(i));
+            }
+
+            JSONObject js1 = new JSONObject();
+            try {
+                js1.put("name", profiles.get(j).getObjectName());
+                js1.put("colors", JSColors);
+
+                jsonArrayDeserialization.put(js1);
+
+                JSONRootObject.put("data",jsonArrayDeserialization);
+                Log.i(TAG, "vytvoreny json " + JSONRootObject.toString());
+
+                SharedPreferences.Editor editor = getSharedPreferences("MyPrefsFile", MODE_PRIVATE).edit();
+                editor.putString("savedData", JSONRootObject.toString());
+                editor.commit();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+        finish();
+        return true;
     }
 }

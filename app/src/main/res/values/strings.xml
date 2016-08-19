@@ -2,5 +2,6 @@
     <string name="app_name">Try4</string>
     <string name="HS">Profiles</string>
     <string name="SP">Profile</string>
+    <string name="delete">delete</string>
     <string name="Add_profile">Add profile</string>
 </resources>
