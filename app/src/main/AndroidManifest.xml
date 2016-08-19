@@ -5,7 +5,7 @@
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
+        android:label="@string/HS"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".HomeScreen">
@@ -16,10 +16,14 @@
             </intent-filter>
         </activity>
         <activity android:name=".ColorPicker" />
-        <activity android:name=".WorkingEdit"
-            android:configChanges="orientation|screenSize|keyboard">
-
-        </activity>
+        <activity
+            android:name=".WorkingEdit"
+            android:configChanges="orientation|screenSize|keyboard"
+            android:label="@string/Add_profile" />
+        <activity
+            android:name=".SingleProfile"
+            android:label="@string/SP" />
+        <activity android:name=".ColorPickerB"></activity>
     </application>
 
 </manifest>

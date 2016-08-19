@@ -6,6 +6,8 @@ import android.content.SharedPreferences;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -51,6 +53,10 @@ public class WorkingEdit extends AppCompatActivity {
         arrayList = new ArrayList<String>();
         cAdapter = new CustomAdapter(this, arrayList);
         list.setAdapter(cAdapter);
+
+        //---------------------------------------------------
+
+        //----------------------------------------------------
 
 
             FloatingActionButton myFabComfirm = (FloatingActionButton) findViewById(R.id.fabWE2);

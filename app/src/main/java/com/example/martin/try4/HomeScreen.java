@@ -6,7 +6,14 @@ import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
@@ -23,6 +30,8 @@ public class HomeScreen extends AppCompatActivity {
     private static final String TAG = "MyActivity";
     FloatingActionMenu materialDesignFAM;
     FloatingActionButton floatingActionButton1, floatingActionButton2, floatingActionButton3;
+
+    ArrayList<Profile> profiles;
 
 
     @Override
@@ -57,8 +66,11 @@ public class HomeScreen extends AppCompatActivity {
 
     @Override
     public void onResume() {
-        super.onResume();  // Always call the superclass method first
+        super.onResume();
         Log.i(TAG,"HS RESUMED");
+        String name = "";
+
+        profiles = new ArrayList<Profile>();
 
         SharedPreferences prefs = getSharedPreferences("MyPrefsFile", MODE_PRIVATE);
         String restoredText = prefs.getString("savedData", null);
@@ -68,33 +80,64 @@ public class HomeScreen extends AppCompatActivity {
             try {
                 JSONObject  jsonRootObjectDeserialization = new JSONObject(restoredText);
                 JSONArray jsonArrayDeserialization = jsonRootObjectDeserialization.optJSONArray("data");
-                Log.i(TAG,"HS deserializacia 0: "+jsonArrayDeserialization.length());
-                Log.i(TAG, "HS deserializacia 1: " + jsonArrayDeserialization.toString());
+                //Log.i(TAG, "HS deserializacia 1: " + jsonArrayDeserialization.toString());
 
                     for(int i=0; i < jsonArrayDeserialization.length(); i++) {
                         JSONObject jsonObject = jsonArrayDeserialization.getJSONObject(i);
                         Log.i(TAG,"HS deserializacia 2: "+jsonObject.toString());
 
-                        String name = jsonObject.optString("name").toString();
-                        Log.i(TAG,"HS deserializacia name 3: "+name);
+
+
+                        //name
+                        name = jsonObject.optString("name").toString();
+                        //Log.i(TAG,"HS deserializacia name 3: "+name);
 
                         JSONArray jsonArrayColors = jsonObject.getJSONArray("colors");
-                        Log.i(TAG,"HS deserializacia colors 3: "+jsonArrayColors.toString());
+                        //Log.i(TAG,"HS deserializacia colors 3: "+jsonArrayColors.toString()+" //////////////////////");
 
-                            for(int j=0; j < jsonArrayColors.length(); j++) {
-                                //JSONObject jsonColor = jsonArrayColors.getJSONObject(j);
-                                //Log.i(TAG,"HS deserializacia colors 3: "+jsonColor);
-                                String color = jsonArrayColors.get(j).toString();
-                                Log.i(TAG,"HS deserializacia color 4: "+color);
-                            }
+                        //colors
+                        ArrayList<String> profileListColors = new ArrayList<String>();
+
+                        for(int j=0; j < jsonArrayColors.length(); j++) {
+
+                            String color = jsonArrayColors.get(j).toString();
+                            profileListColors.add(color);
+                            //Log.i(TAG,"HS deserializacia color 4: "+color);
+                        }
+
+                        Profile profile = new Profile(name,profileListColors);
+                        profiles.add(profile);
                     }
-
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+
+            ArrayAdapter<Profile> allAdapter = new CustomAdapterProfiles(this, profiles);
+            ListView menuListView = (ListView) findViewById(R.id.listViewHS);
+            menuListView.setAdapter(allAdapter);
+
+            menuListView.setOnItemClickListener(
+                    new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long l) {
+                            Profile profile = (Profile) parent.getAdapter().getItem(position);
+
+                            Intent i = new Intent(HomeScreen.this, SingleProfile.class);
+                            i.putExtra("objectsList", profiles);
+                            i.putExtra("objectKEY", profile);
+                            i.putExtra("objectID", position);
+                            startActivity(i);
+
+
+                        }
+                    }
+            );
+
+
         }
 
 
 
     }
+
 }

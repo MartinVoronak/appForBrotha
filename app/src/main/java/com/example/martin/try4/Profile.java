@@ -1,9 +1,10 @@
 package com.example.martin.try4;
 
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Profile {
+public class Profile implements Serializable {
 
     private String objectName;
     private ArrayList<String> arrayColorList;
