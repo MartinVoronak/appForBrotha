@@ -23,6 +23,8 @@ public class SingleProfile extends AppCompatActivity {
     Profile profile = null;
     ListView list;
     CustomAdapter cAdapter;
+    TextView editTextSP;
+
     int objectID;
     ArrayList<Profile> profiles;
 
@@ -41,7 +43,7 @@ public class SingleProfile extends AppCompatActivity {
         this.objectID = (int) i.getSerializableExtra("objectID");
         this.profiles = (ArrayList<Profile>) i.getSerializableExtra("objectsList");
 
-        TextView editTextSP = (TextView)findViewById(R.id.editTextSP);
+        editTextSP = (TextView)findViewById(R.id.editTextSP);
         editTextSP.setText(profile.getObjectName());
 
         list = (ListView) findViewById(R.id.mylistViewSP);
@@ -55,8 +57,52 @@ public class SingleProfile extends AppCompatActivity {
         FloatingActionButton myFab = (FloatingActionButton) findViewById(R.id.fabSP3);
         myFab.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent i = new Intent(SingleProfile.this, ColorPickerB.class);
+                Intent i = new Intent(SingleProfile.this, ColorPicker.class);
                 startActivityForResult(i, REQ_CODE_NEW);
+            }
+        });
+
+        FloatingActionButton myFabOK = (FloatingActionButton) findViewById(R.id.fabSPC);
+        myFabOK.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+
+                Profile newProfile = new Profile(editTextSP.getText().toString(),arrayList);
+                profiles.set(objectID,newProfile);
+
+                JSONArray jsonArrayDeserialization= new JSONArray();
+
+                for (int j=0;j<profiles.size();j++)
+                {
+                    JSONArray JSColors = new JSONArray();
+                    JSONObject JSONRootObject = new JSONObject();
+
+                    for (int i = 0; i < profiles.get(j).getArrayList().size(); i++){
+                        JSColors.put(profiles.get(j).getArrayList().get(i));
+                    }
+
+                    JSONObject js1 = new JSONObject();
+                    try {
+                        js1.put("name", profiles.get(j).getObjectName());
+                        js1.put("colors", JSColors);
+
+                        jsonArrayDeserialization.put(js1);
+
+                        JSONRootObject.put("data",jsonArrayDeserialization);
+                        Log.i(TAG, "vytvoreny json " + JSONRootObject.toString());
+
+                        SharedPreferences.Editor editor = getSharedPreferences("MyPrefsFile", MODE_PRIVATE).edit();
+                        editor.putString("savedData", JSONRootObject.toString());
+                        editor.commit();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
+
+                Intent i = new Intent(SingleProfile.this, HomeScreen.class);
+                startActivity(i);
+                finish();
             }
         });
     }

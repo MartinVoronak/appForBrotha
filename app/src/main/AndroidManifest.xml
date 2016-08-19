@@ -23,7 +23,6 @@
         <activity
             android:name=".SingleProfile"
             android:label="@string/SP" />
-        <activity android:name=".ColorPickerB"></activity>
     </application>
 
 </manifest>

@@ -68,7 +68,6 @@ public class WorkingEdit extends AppCompatActivity {
 
                     JSONArray JSColors = new JSONArray();
                     JSONObject JSONRootObject = new JSONObject();
-                    JSONArray jsonRootArray = new JSONArray();
 
                     JSONArray jsonArrayDeserialization= new JSONArray();
 
