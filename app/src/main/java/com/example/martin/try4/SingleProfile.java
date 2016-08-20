@@ -34,6 +34,8 @@ public class SingleProfile extends AppCompatActivity {
     ArrayList<Profile> profiles;
 
     final static int REQ_CODE_NEW = 1;
+    final static int REQ_CODE_CHANGE = 2;
+    int pickedPosition;
     String pickedColor;
     ArrayList<String> arrayList;
 
@@ -60,7 +62,8 @@ public class SingleProfile extends AppCompatActivity {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long l) {
                         Intent i = new Intent(SingleProfile.this, ColorPicker.class);
-                        startActivity(i);
+                        startActivityForResult(i, REQ_CODE_CHANGE);
+                        pickedPosition = position;
                     }
                 }
         );
@@ -81,8 +84,9 @@ public class SingleProfile extends AppCompatActivity {
         FloatingActionButton myFab = (FloatingActionButton) findViewById(R.id.fabSP3);
         myFab.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+
                 Intent i = new Intent(SingleProfile.this, ColorPicker.class);
-                startActivityForResult(i, REQ_CODE_NEW);
+                startActivityForResult(i, REQ_CODE_NEW); //RCN == 1
             }
         });
 
@@ -136,21 +140,32 @@ public class SingleProfile extends AppCompatActivity {
 
         // TODO if nad pridanou alebo zmenenou farbou
 
-        if(requestCode == REQ_CODE_NEW){
+        switch(requestCode){
+            case 1:
 
-            if (resultCode == RESULT_OK){
-                pickedColor=data.getStringExtra("picked");
-                Log.i(TAG, "prenesena farba: " + pickedColor);
+                if (resultCode == RESULT_OK){
+                    pickedColor=data.getStringExtra("picked");
+                    Log.i(TAG, "prenesena farba: " + pickedColor);
 
-                arrayList.add(pickedColor);
-                cAdapter = new CustomAdapter(this, arrayList);
-                list.setAdapter(cAdapter);
+                    arrayList.add(pickedColor);
+                    //cAdapter = new CustomAdapter(this, arrayList);
+                    list.setAdapter(cAdapter);
 
-            }else if(resultCode == RESULT_CANCELED){
-                Log.i(TAG,"nepreniesla sa farba");
-            }
+                }else if(resultCode == RESULT_CANCELED){
+                    Log.i(TAG,"nepreniesla sa farba");
+                }
+
+                break;
+            case 2:
+                if (resultCode == RESULT_OK) {
+                    pickedColor = data.getStringExtra("picked");
+                    arrayList.set(pickedPosition, pickedColor);
+                    list.setAdapter(cAdapter);
+
+                    Log.i(TAG, "zmena farby na poz: " + pickedPosition);
+                }
+                break;
         }
-
     }
 
     @Override
