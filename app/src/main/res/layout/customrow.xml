@@ -14,7 +14,7 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Large Text"
         android:id="@+id/listID"
-        android:textColor="#fc000000"
+        android:textColor="#fccecece"
         android:textSize="26dp"
         android:gravity="center"
         android:tag="bo"

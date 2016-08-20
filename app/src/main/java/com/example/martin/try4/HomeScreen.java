@@ -120,11 +120,9 @@ public class HomeScreen extends AppCompatActivity {
                     new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long l) {
-                            Profile profile = (Profile) parent.getAdapter().getItem(position);
 
                             Intent i = new Intent(HomeScreen.this, SingleProfile.class);
                             i.putExtra("objectsList", profiles);
-                            i.putExtra("objectKEY", profile);
                             i.putExtra("objectID", position);
                             startActivity(i);
 

@@ -10,9 +10,11 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -39,24 +41,42 @@ public class SingleProfile extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_single_profile);
-        Log.i(TAG,"--------------SP----------------");
+        Log.i(TAG, "--------------SP----------------");
 
         Intent i = getIntent();
-        this.profile = (Profile) i.getSerializableExtra("objectKEY");
         this.objectID = (int) i.getSerializableExtra("objectID");
         this.profiles = (ArrayList<Profile>) i.getSerializableExtra("objectsList");
+        this.profile = profiles.get(objectID);
 
         editTextSP = (TextView)findViewById(R.id.editTextSP);
         editTextSP.setText(profile.getObjectName());
-        //editTextSP.setSelected(false);
 
         list = (ListView) findViewById(R.id.mylistViewSP);
         cAdapter = new CustomAdapter(this, profile.getArrayList());
         list.setAdapter(cAdapter);
 
+        list.setOnItemClickListener(
+                new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long l) {
+                        Intent i = new Intent(SingleProfile.this, ColorPicker.class);
+                        startActivity(i);
+                    }
+                }
+        );
+
+        list.setOnItemLongClickListener(
+                new AdapterView.OnItemLongClickListener() {
+            public boolean onItemLongClick(AdapterView<?> arg0, View v, int index, long arg3) {
+
+                arrayList.remove(index);
+                list.setAdapter(cAdapter);
+                return false;
+            }
+        });
+
+        //color preview of one profile
         arrayList = profile.getArrayList();
-
-
 
         FloatingActionButton myFab = (FloatingActionButton) findViewById(R.id.fabSP3);
         myFab.setOnClickListener(new View.OnClickListener() {
@@ -114,7 +134,7 @@ public class SingleProfile extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        // TODO Auto-generated method stub
+        // TODO if nad pridanou alebo zmenenou farbou
 
         if(requestCode == REQ_CODE_NEW){
 
