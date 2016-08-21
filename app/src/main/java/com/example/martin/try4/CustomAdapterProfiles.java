@@ -10,7 +10,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 
-
+//HOMESCREEN
 public class CustomAdapterProfiles extends ArrayAdapter<Profile> {
 
     ArrayList<Profile> myArrayList = null;
