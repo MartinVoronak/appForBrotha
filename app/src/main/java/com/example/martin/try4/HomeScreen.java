@@ -75,25 +75,20 @@ public class HomeScreen extends AppCompatActivity {
         SharedPreferences prefs = getSharedPreferences("MyPrefsFile", MODE_PRIVATE);
         String restoredText = prefs.getString("savedData", null);
         if (restoredText != null) {
-            Log.i(TAG,"HS Savenuty JSON: "+restoredText);
+            Log.i(TAG, "HS Savenuty JSON: " + restoredText);
 
             try {
                 JSONObject  jsonRootObjectDeserialization = new JSONObject(restoredText);
                 JSONArray jsonArrayDeserialization = jsonRootObjectDeserialization.optJSONArray("data");
-                //Log.i(TAG, "HS deserializacia 1: " + jsonArrayDeserialization.toString());
 
                     for(int i=0; i < jsonArrayDeserialization.length(); i++) {
                         JSONObject jsonObject = jsonArrayDeserialization.getJSONObject(i);
                         Log.i(TAG,"HS deserializacia 2: "+jsonObject.toString());
 
 
-
                         //name
                         name = jsonObject.optString("name").toString();
-                        //Log.i(TAG,"HS deserializacia name 3: "+name);
-
                         JSONArray jsonArrayColors = jsonObject.getJSONArray("colors");
-                        //Log.i(TAG,"HS deserializacia colors 3: "+jsonArrayColors.toString()+" //////////////////////");
 
                         //colors
                         ArrayList<String> profileListColors = new ArrayList<String>();
@@ -102,7 +97,6 @@ public class HomeScreen extends AppCompatActivity {
 
                             String color = jsonArrayColors.get(j).toString();
                             profileListColors.add(color);
-                            //Log.i(TAG,"HS deserializacia color 4: "+color);
                         }
 
                         Profile profile = new Profile(name,profileListColors);
@@ -111,29 +105,24 @@ public class HomeScreen extends AppCompatActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
-            ArrayAdapter<Profile> allAdapter = new CustomAdapterProfiles(this, profiles);
-            ListView menuListView = (ListView) findViewById(R.id.listViewHS);
-            menuListView.setAdapter(allAdapter);
-
-            menuListView.setOnItemClickListener(
-                    new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> parent, View view, int position, long l) {
-
-                            Intent i = new Intent(HomeScreen.this, SingleProfile.class);
-                            i.putExtra("objectsList", profiles);
-                            i.putExtra("objectID", position);
-                            startActivity(i);
-
-
-                        }
-                    }
-            );
-
-
         }
 
+        ArrayAdapter<Profile> allAdapter = new CustomAdapterProfiles(this, profiles);
+        ListView menuListView = (ListView) findViewById(R.id.listViewHS);
+        menuListView.setAdapter(allAdapter);
+
+        menuListView.setOnItemClickListener(
+                new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long l) {
+
+                        Intent i = new Intent(HomeScreen.this, SingleProfile.class);
+                        i.putExtra("objectsList", profiles);
+                        i.putExtra("objectID", position);
+                        startActivity(i);
+                    }
+                }
+        );
 
 
     }

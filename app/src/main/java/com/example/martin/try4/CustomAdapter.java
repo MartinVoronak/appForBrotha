@@ -33,7 +33,6 @@ public class CustomAdapter extends ArrayAdapter<ArrayList<String>> {
         profileText.setText(singleItem);
         //set background of drawable
         profileColor.getBackground().setColorFilter(Color.parseColor("#"+myArrayList.get(position).toString()), PorterDuff.Mode.SRC_ATOP);
-        //profileColor.setBackgroundColor(Color.parseColor("#"+myArrayList.get(position).toString()));
 
         return customView;
     }
