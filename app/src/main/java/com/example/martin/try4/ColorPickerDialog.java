@@ -4,6 +4,7 @@ package com.example.martin.try4;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.text.Editable;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
@@ -24,15 +25,12 @@ public class ColorPickerDialog extends AlertDialog {
 
         colorPickerView = new ColorPicker(context);
         colorPickerView.setColor(initialColor);
-
         relativeLayout.addView(colorPickerView, layoutParams);
 
         setButton(BUTTON_POSITIVE, context.getString(android.R.string.ok), onClickListener);
-        setButton(BUTTON_NEUTRAL, context.getString(R.string.ownColor), onClickListener);
         setButton(BUTTON_NEGATIVE, context.getString(android.R.string.cancel), onClickListener);
 
         setView(relativeLayout);
-
     }
 
     private OnClickListener onClickListener = new DialogInterface.OnClickListener() {
@@ -44,16 +42,6 @@ public class ColorPickerDialog extends AlertDialog {
                     break;
                 case BUTTON_NEGATIVE:
                     dialog.dismiss();
-                    break;
-                case BUTTON_NEUTRAL:
-                    AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
-
-                    final EditText edittext = new EditText(getContext());
-                    alert.setMessage("Enter Your Message");
-                    alert.setTitle("Enter Your Title");
-
-                    alert.setView(edittext);
-
                     break;
             }
         }
