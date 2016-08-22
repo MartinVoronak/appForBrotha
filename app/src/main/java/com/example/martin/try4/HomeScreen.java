@@ -41,8 +41,8 @@ public class HomeScreen extends AppCompatActivity {
         Log.i(TAG, "---------------------------------------------------------------------------------------------------------");
 
         materialDesignFAM = (FloatingActionMenu) findViewById(R.id.material_design_android_floating_action_menu);
-        floatingActionButton1 = (FloatingActionButton) findViewById(R.id.material_design_floating_action_menu_item1);
 
+        floatingActionButton1 = (FloatingActionButton) findViewById(R.id.material_design_floating_action_menu_item1);
         floatingActionButton1.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent i = new Intent(HomeScreen.this, WorkingEdit.class);
@@ -51,12 +51,20 @@ public class HomeScreen extends AppCompatActivity {
         });
 
         floatingActionButton2 = (FloatingActionButton) findViewById(R.id.material_design_floating_action_menu_item2);
-
         floatingActionButton2.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 SharedPreferences.Editor editor = getSharedPreferences("MyPrefsFile", MODE_PRIVATE).edit();
                 editor.clear();
                 editor.commit();
+
+            }
+        });
+
+        floatingActionButton3 = (FloatingActionButton) findViewById(R.id.material_design_floating_action_menu_item3);
+        floatingActionButton3.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent i = new Intent(HomeScreen.this, ColorPicker_try1.class);
+                startActivity(i);
 
             }
         });

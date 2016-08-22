@@ -3,7 +3,6 @@ package com.example.martin.try4;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.graphics.LinearGradient;
 import android.graphics.Shader;
 import android.graphics.drawable.Drawable;
@@ -19,10 +18,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -88,7 +85,7 @@ public class SingleProfile extends AppCompatActivity {
                 new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long l) {
-                        Intent i = new Intent(SingleProfile.this, ColorPicker.class);
+                        Intent i = new Intent(SingleProfile.this, ColorPickerFake.class);
                         startActivityForResult(i, REQ_CODE_CHANGE);
                         pickedPosition = position;
                     }
@@ -115,7 +112,7 @@ public class SingleProfile extends AppCompatActivity {
         myFab.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
-                Intent i = new Intent(SingleProfile.this, ColorPicker.class);
+                Intent i = new Intent(SingleProfile.this, ColorPickerFake.class);
                 startActivityForResult(i, REQ_CODE_NEW); //RCN == 1
             }
         });

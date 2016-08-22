@@ -15,7 +15,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ColorPicker" />
         <activity
             android:name=".WorkingEdit"
             android:configChanges="orientation|screenSize|keyboard"
@@ -23,6 +22,8 @@
         <activity
             android:name=".SingleProfile"
             android:label="@string/SP" />
+        <activity android:name=".ColorPickerFake" />
+        <activity android:name=".ColorPicker_try1"></activity>
     </application>
 
 </manifest>
