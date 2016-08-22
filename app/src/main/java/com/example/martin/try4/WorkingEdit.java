@@ -3,6 +3,12 @@ package com.example.martin.try4;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.LinearGradient;
+import android.graphics.Shader;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.PaintDrawable;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.RectShape;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,6 +16,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -32,6 +39,17 @@ public class WorkingEdit extends AppCompatActivity {
     ListView list;
     CustomAdapter cAdapter;
     ArrayList <Profile> profileArray;
+    int pickedPosition;
+    final static int REQ_CODE_NEW = 1;
+    final static int REQ_CODE_CHANGE = 2;
+
+    //gradient
+    int[] arrColors;
+    int numColors;
+    float floatArray[];
+    float scale;
+    View layout;
+    PaintDrawable paint;
 
 
     @Override
@@ -45,7 +63,7 @@ public class WorkingEdit extends AppCompatActivity {
             myFab.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     Intent i = new Intent(WorkingEdit.this, ColorPicker.class);
-                    startActivityForResult(i, REQ_CODE);
+                    startActivityForResult(i, REQ_CODE_NEW);
                 }
             });
 
@@ -54,9 +72,29 @@ public class WorkingEdit extends AppCompatActivity {
         cAdapter = new CustomAdapter(this, arrayList);
         list.setAdapter(cAdapter);
 
-        //---------------------------------------------------
+        list.setOnItemClickListener(
+                new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long l) {
+                        Intent i = new Intent(WorkingEdit.this, ColorPicker.class);
+                        startActivityForResult(i, REQ_CODE_CHANGE);
+                        pickedPosition = position;
+                    }
+                }
+        );
 
-        //----------------------------------------------------
+        list.setOnItemLongClickListener(
+                new AdapterView.OnItemLongClickListener() {
+                    public boolean onItemLongClick(AdapterView<?> arg0, View v, int index, long arg3) {
+
+                        Log.i(TAG,"SP to delete: "+index);
+                        arrayList.remove(index);
+                        list.setAdapter(cAdapter);
+
+                        setGradient();
+                        return false;
+                    }
+                });
 
 
             FloatingActionButton myFabComfirm = (FloatingActionButton) findViewById(R.id.fabWE2);
@@ -120,22 +158,35 @@ public class WorkingEdit extends AppCompatActivity {
 
         // TODO Auto-generated method stub
 
-        if(requestCode == REQ_CODE){
+        switch(requestCode){
+            case 1:
 
-            if (resultCode == RESULT_OK){
-                pickedColor=data.getStringExtra("picked");
-                Log.i(TAG, "prenesena farba: " + pickedColor);
+                if (resultCode == RESULT_OK){
+                    pickedColor=data.getStringExtra("picked");
+                    Log.i(TAG, "prenesena farba: " + pickedColor);
 
-                arrayList.add(pickedColor);
-                list.setAdapter(cAdapter);
+                    arrayList.add(pickedColor);
+                    //cAdapter = new CustomAdapter(this, arrayList);
+                    list.setAdapter(cAdapter);
 
+                }else if(resultCode == RESULT_CANCELED){
+                    Log.i(TAG,"nepreniesla sa farba");
+                }
 
+                break;
+            case 2:
+                if (resultCode == RESULT_OK) {
+                    pickedColor = data.getStringExtra("picked");
+                    arrayList.set(pickedPosition, pickedColor);
+                    list.setAdapter(cAdapter);
 
-            }else if(resultCode == RESULT_CANCELED){
-                Log.i(TAG,"nepreniesla sa farba");
-            }
+                    Log.i(TAG, "zmena farby na poz: " + pickedPosition);
+                }
+                break;
         }
 
+        //--------------------------------GRADIENT----------------------------------------------//
+        setGradient();
     }
 
     @Override
@@ -144,5 +195,55 @@ public class WorkingEdit extends AppCompatActivity {
         Intent i = new Intent(this, HomeScreen.class);
         startActivity(i);
         finish();
+    }
+
+    public void setGradient(){
+        numColors = arrayList.size();
+        arrColors = new int[numColors];
+
+        scale = (float) 1/(numColors-1);
+        Log.i(TAG, "SP scale: " + scale);
+
+        if (numColors>1){
+
+            floatArray = new float[numColors];
+            floatArray[0]=0;
+            floatArray[numColors-1] = 1;
+
+            float temp = scale;
+            for (int j=1;j<numColors-1;j++){
+                floatArray[j]= temp;
+                temp = temp + scale;
+                Log.i(TAG,"SP floatArray: "+floatArray[j]);
+            }
+
+
+            //profile.getArrayList().size()
+            for (int j=0;j<numColors;j++){
+                arrColors[j] = Integer.parseInt(arrayList.get(j).toString(), 16)+0xFF000000;
+            }
+
+            ShapeDrawable.ShaderFactory shaderFactory = new ShapeDrawable.ShaderFactory() {
+                @Override
+                public Shader resize(int width, int height) {
+                    LinearGradient linearGradient = new LinearGradient(0, 0, width, height,
+                            arrColors, //pouzity array farieb
+                            floatArray,
+                            Shader.TileMode.REPEAT);
+                    return linearGradient;
+                }
+            };
+            paint = new PaintDrawable();
+            paint.setShape(new RectShape());
+            paint.setShaderFactory(shaderFactory);
+
+            layout = findViewById(R.id.gradientAddProfile);
+            layout.setBackgroundDrawable((Drawable) paint);
+        }
+        else if (numColors==1){
+
+            layout = findViewById(R.id.gradientAddProfile);
+            layout.setBackgroundColor(Integer.parseInt(arrayList.get(0).toString(), 16)+0xFF000000);
+        }
     }
 }

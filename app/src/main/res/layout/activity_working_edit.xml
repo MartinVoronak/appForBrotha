@@ -3,17 +3,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     tools:context="com.example.martin.try4.WorkingEdit">
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="15dp"
+        android:background="@android:color/white"
+        android:id="@+id/gradientAddProfile"
+        />
+
+
     <LinearLayout
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
+        android:layout_height="match_parent"
+        android:paddingTop="16dp">
+w
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
@@ -55,7 +64,7 @@
 
             <ListView
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
+                android:layout_height="390dp"
                 android:id="@+id/mylistView"
                 android:paddingTop="4dp" />
 

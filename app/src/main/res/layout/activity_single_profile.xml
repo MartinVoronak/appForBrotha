@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    tools:context="com.example.martin.try4.WorkingEdit">
+    tools:context="com.example.martin.try4.SingleProfile">
 
     <View
         android:layout_width="match_parent"

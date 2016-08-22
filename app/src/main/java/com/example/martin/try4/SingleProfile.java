@@ -104,6 +104,8 @@ public class SingleProfile extends AppCompatActivity {
                 Log.i(TAG,"SP to delete: "+index);
                 arrayList.remove(index);
                 list.setAdapter(cAdapter);
+
+                setGradient();
                 return false;
             }
         });
