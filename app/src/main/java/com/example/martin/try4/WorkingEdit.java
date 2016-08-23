@@ -57,7 +57,7 @@ public class WorkingEdit extends AppCompatActivity {
             FloatingActionButton myFab = (FloatingActionButton) findViewById(R.id.fabWE);
             myFab.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    Intent i = new Intent(WorkingEdit.this, ColorPickerFake.class);
+                    Intent i = new Intent(WorkingEdit.this, ColorPicker_try1.class);
                     startActivityForResult(i, REQ_CODE_NEW);
                 }
             });
@@ -71,7 +71,7 @@ public class WorkingEdit extends AppCompatActivity {
                 new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long l) {
-                        Intent i = new Intent(WorkingEdit.this, ColorPickerFake.class);
+                        Intent i = new Intent(WorkingEdit.this, ColorPicker_try1.class);
                         startActivityForResult(i, REQ_CODE_CHANGE);
                         pickedPosition = position;
                     }
@@ -151,21 +151,19 @@ public class WorkingEdit extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        // TODO Auto-generated method stub
-
         switch(requestCode){
             case 1:
 
                 if (resultCode == RESULT_OK){
                     pickedColor=data.getStringExtra("picked");
-                    Log.i(TAG, "prenesena farba: " + pickedColor);
+                    Log.i(TAG, "WE prenesena farba: " + pickedColor);
 
                     arrayList.add(pickedColor);
                     //cAdapter = new CustomAdapter(this, arrayList);
                     list.setAdapter(cAdapter);
 
                 }else if(resultCode == RESULT_CANCELED){
-                    Log.i(TAG,"nepreniesla sa farba");
+                    Log.i(TAG,"WE nepreniesla sa farba");
                 }
 
                 break;

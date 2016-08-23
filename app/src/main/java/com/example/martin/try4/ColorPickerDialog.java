@@ -4,7 +4,9 @@ package com.example.martin.try4;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.text.Editable;
+import android.util.Log;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
@@ -13,6 +15,7 @@ public class ColorPickerDialog extends AlertDialog {
 
     private ColorPicker colorPickerView;
     private final OnColorSelectedListener onColorSelectedListener;
+    private static final String TAG = "MyActivity";
 
     public ColorPickerDialog(Context context, int initialColor, OnColorSelectedListener onColorSelectedListener) {
         super(context);
@@ -39,6 +42,7 @@ public class ColorPickerDialog extends AlertDialog {
                 case BUTTON_POSITIVE:
                     int selectedColor = colorPickerView.getColor();
                     onColorSelectedListener.onColorSelected(selectedColor);
+
                     break;
                 case BUTTON_NEGATIVE:
                     dialog.dismiss();

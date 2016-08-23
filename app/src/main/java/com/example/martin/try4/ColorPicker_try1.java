@@ -1,6 +1,8 @@
 package com.example.martin.try4;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,6 +17,7 @@ public class ColorPicker_try1 extends AppCompatActivity {
     EditText eText;
     int initialColor;
     Context skuska;
+    Intent i;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,8 +34,14 @@ public class ColorPicker_try1 extends AppCompatActivity {
 
             @Override
             public void onColorSelected(int color) {
-                Log.i(TAG, " vybrata farba: " + color);
-                //eText.setText(Integer.toHexString(color));
+                Log.i(TAG, "CP cp vybrata farba: " + color);
+
+                //CONTENT
+                Intent i = new Intent();
+                i.putExtra("picked", Integer.toHexString(color).substring(2));
+                setResult(RESULT_OK, i);
+
+                finish();
             }
 
         });
@@ -42,18 +51,24 @@ public class ColorPicker_try1 extends AppCompatActivity {
         Button button = (Button) findViewById(R.id.buttonCP);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                ColorPickerDialog colorPickerDialog = new ColorPickerDialog(skuska, Integer.parseInt(eText.getText().toString(), 16)+0xFF000000, new ColorPickerDialog.OnColorSelectedListener() {
+                ColorPickerDialog colorPickerDialog = new ColorPickerDialog(skuska, Integer.parseInt(eText.getText().toString(), 16) + 0xFF000000, new ColorPickerDialog.OnColorSelectedListener() {
 
                     @Override
                     public void onColorSelected(int color) {
-                        Log.i(TAG, " vybrata farba: " + color);
+                        Log.i(TAG, "CP my vybrata farba: " + color);
+
+                        //CONTENT
+                        Intent i = new Intent();
+                        i.putExtra("picked", Integer.toHexString(color).substring(2));
+                        setResult(RESULT_OK, i);
+
+                        finish();
                     }
 
                 });
                 colorPickerDialog.show();
             }
         });
-
 
     }
 }

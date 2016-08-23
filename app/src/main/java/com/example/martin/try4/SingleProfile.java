@@ -57,6 +57,8 @@ public class SingleProfile extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.i(TAG, "-------------------------------------- SP ONCREATE --------------------------------------");
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_single_profile);
         Log.i(TAG, "--------------SP----------------");
@@ -85,7 +87,7 @@ public class SingleProfile extends AppCompatActivity {
                 new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long l) {
-                        Intent i = new Intent(SingleProfile.this, ColorPickerFake.class);
+                        Intent i = new Intent(SingleProfile.this, ColorPicker_try1.class);
                         startActivityForResult(i, REQ_CODE_CHANGE);
                         pickedPosition = position;
                     }
@@ -112,7 +114,7 @@ public class SingleProfile extends AppCompatActivity {
         myFab.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
-                Intent i = new Intent(SingleProfile.this, ColorPickerFake.class);
+                Intent i = new Intent(SingleProfile.this, ColorPicker_try1.class);
                 startActivityForResult(i, REQ_CODE_NEW); //RCN == 1
             }
         });
@@ -166,13 +168,14 @@ public class SingleProfile extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.i(TAG, "-------------------------------------- SP ONRESULT --------------------------------------");
 
         switch(requestCode){
             case 1:
 
                 if (resultCode == RESULT_OK){
                     pickedColor=data.getStringExtra("picked");
-                    Log.i(TAG, "prenesena farba: " + pickedColor);
+                    Log.i(TAG, "SP prenesena farba: " + pickedColor);
 
                     arrayList.add(pickedColor);
                     //cAdapter = new CustomAdapter(this, arrayList);

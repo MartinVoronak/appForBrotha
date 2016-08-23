@@ -20,14 +20,18 @@ import android.graphics.SweepGradient;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.EditText;
 
 public class ColorPicker extends View {
 
     /**
      * Customizable display parameters (in percents)
      */
+    private static final String TAG = "MyActivity";
+
     private final int paramOuterPadding = 2; // outer padding of the whole color picker view
     private final int paramInnerPadding = 5; // distance between value slider wheel and inner color wheel
     private final int paramValueSliderWidth = 10; // width of the value slider
