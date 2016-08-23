@@ -1,35 +1,24 @@
 package com.example.martin.try4;
 
-import android.content.Context;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.Animation;
-import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-
-import com.github.clans.fab.FloatingActionButton;
-import com.github.clans.fab.FloatingActionMenu;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class HomeScreen extends AppCompatActivity {
 
     private static final String TAG = "MyActivity";
-    FloatingActionMenu materialDesignFAM;
-    FloatingActionButton floatingActionButton1, floatingActionButton2, floatingActionButton3;
 
     ArrayList<Profile> profiles;
 
@@ -40,32 +29,11 @@ public class HomeScreen extends AppCompatActivity {
         setContentView(R.layout.activity_home_screen);
         Log.i(TAG, "---------------------------------------------------------------------------------------------------------");
 
-        materialDesignFAM = (FloatingActionMenu) findViewById(R.id.material_design_android_floating_action_menu);
-
-        floatingActionButton1 = (FloatingActionButton) findViewById(R.id.material_design_floating_action_menu_item1);
+        FloatingActionButton floatingActionButton1 = (FloatingActionButton) findViewById(R.id.fabHS);
         floatingActionButton1.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent i = new Intent(HomeScreen.this, WorkingEdit.class);
                 startActivity(i);
-            }
-        });
-
-        floatingActionButton2 = (FloatingActionButton) findViewById(R.id.material_design_floating_action_menu_item2);
-        floatingActionButton2.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                SharedPreferences.Editor editor = getSharedPreferences("MyPrefsFile", MODE_PRIVATE).edit();
-                editor.clear();
-                editor.commit();
-
-            }
-        });
-
-        floatingActionButton3 = (FloatingActionButton) findViewById(R.id.material_design_floating_action_menu_item3);
-        floatingActionButton3.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent i = new Intent(HomeScreen.this, ColorPicker_try1.class);
-                startActivity(i);
-
             }
         });
 
