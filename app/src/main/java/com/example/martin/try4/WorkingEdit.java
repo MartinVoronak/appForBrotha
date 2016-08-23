@@ -1,5 +1,6 @@
 package com.example.martin.try4;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.LinearGradient;
@@ -9,9 +10,13 @@ import android.graphics.drawable.PaintDrawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.RectShape;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -46,6 +51,7 @@ public class WorkingEdit extends AppCompatActivity {
     View layout;
     PaintDrawable paint;
 
+    int position;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,12 +88,12 @@ public class WorkingEdit extends AppCompatActivity {
                 new AdapterView.OnItemLongClickListener() {
                     public boolean onItemLongClick(AdapterView<?> arg0, View v, int index, long arg3) {
 
-                        Log.i(TAG,"SP to delete: "+index);
-                        arrayList.remove(index);
-                        list.setAdapter(cAdapter);
+                        position=index;
 
-                        setGradient();
-                        return false;
+                        AlertDialog diaBox = AskOption();
+                        diaBox.show();
+
+                        return true;
                     }
                 });
 
@@ -238,5 +244,53 @@ public class WorkingEdit extends AppCompatActivity {
             layout = findViewById(R.id.gradientAddProfile);
             layout.setBackgroundColor(Integer.parseInt(arrayList.get(0).toString(), 16)+0xFF000000);
         }
+    }
+
+    private AlertDialog AskOption()
+    {
+        AlertDialog myQuittingDialogBox =new AlertDialog.Builder(this)
+                //set message, title, and icon
+                .setTitle("Delete")
+                .setMessage("Do you wish to Delete ?")
+               // .setIcon(R.drawable.delete)
+
+                .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int whichButton) {
+
+                        Log.i(TAG,"SP to delete: "+position);
+                        arrayList.remove(position);
+                        list.setAdapter(cAdapter);
+
+                        setGradient();
+
+                        dialog.dismiss();
+                    }
+
+                })
+
+
+
+                .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        dialog.dismiss();
+                    }
+                })
+                .create();
+        return myQuittingDialogBox;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menudelete, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        finish();
+    return true;
     }
 }
