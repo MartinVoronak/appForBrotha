@@ -52,6 +52,9 @@ public class WorkingEdit extends AppCompatActivity {
     PaintDrawable paint;
 
     int position;
+    float pickedGradientPosition;
+    ArrayList<Float> floatArrayGradient;
+    float[] result;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +62,7 @@ public class WorkingEdit extends AppCompatActivity {
         setContentView(R.layout.activity_working_edit);
 
         profileArray = new ArrayList<Profile>();
+        floatArrayGradient = new ArrayList<Float>();
 
             FloatingActionButton myFab = (FloatingActionButton) findViewById(R.id.fabWE);
             myFab.setOnClickListener(new View.OnClickListener() {
@@ -106,6 +110,8 @@ public class WorkingEdit extends AppCompatActivity {
                     Log.i(TAG,"WE nazov :"+editText.getText().toString());
 
                     JSONArray JSColors = new JSONArray();
+                    JSONArray JSGradients = new JSONArray();
+
                     JSONObject JSONRootObject = new JSONObject();
 
                     JSONArray jsonArrayDeserialization= new JSONArray();
@@ -128,11 +134,17 @@ public class WorkingEdit extends AppCompatActivity {
                         JSColors.put(arrayList.get(i));
                     }
 
+                    for (int i = 0; i < arrayList.size(); i++){
+                        JSGradients.put(floatArrayGradient.get(i).toString());
+                    }
+
                     try {
                         //json object to be saved
                         JSONObject js1 = new JSONObject();
                         js1.put("name", editText.getText().toString());
                         js1.put("colors", JSColors);
+                        js1.put("gradients", JSGradients);
+
                         //jsonroot array to be modified
                         jsonArrayDeserialization.put(js1);
 
@@ -161,11 +173,18 @@ public class WorkingEdit extends AppCompatActivity {
             case 1:
 
                 if (resultCode == RESULT_OK){
-                    pickedColor=data.getStringExtra("picked");
-                    Log.i(TAG, "WE prenesena farba: " + pickedColor);
+                    pickedColor = data.getStringExtra("picked");
+
+                    if (arrayList.size()!=0) {
+                        pickedGradientPosition = (float) Float.parseFloat(data.getStringExtra("pickedGradientPostion")) / 100;
+                        Log.i(TAG, "WE prenesena farba a pozicia: " + pickedColor +" "+pickedGradientPosition);
+                    }
+                    else {
+                        pickedGradientPosition = 0;
+                    }
 
                     arrayList.add(pickedColor);
-                    //cAdapter = new CustomAdapter(this, arrayList);
+                    floatArrayGradient.add(pickedGradientPosition);
                     list.setAdapter(cAdapter);
 
                 }else if(resultCode == RESULT_CANCELED){
@@ -176,7 +195,9 @@ public class WorkingEdit extends AppCompatActivity {
             case 2:
                 if (resultCode == RESULT_OK) {
                     pickedColor = data.getStringExtra("picked");
+                    pickedGradientPosition = (float) Float.parseFloat(data.getStringExtra("pickedGradientPostion"))/100;
                     arrayList.set(pickedPosition, pickedColor);
+                    floatArrayGradient.set(pickedPosition,pickedGradientPosition);
                     list.setAdapter(cAdapter);
 
                     Log.i(TAG, "zmena farby na poz: " + pickedPosition);
@@ -202,24 +223,21 @@ public class WorkingEdit extends AppCompatActivity {
 
         scale = (float) 1/(numColors-1);
         Log.i(TAG, "SP scale: " + scale);
+        Log.i(TAG, "SP numColors: " + numColors);
 
         if (numColors>1){
 
-            floatArray = new float[numColors];
-            floatArray[0]=0;
-            floatArray[numColors-1] = 1;
-
-            float temp = scale;
-            for (int j=1;j<numColors-1;j++){
-                floatArray[j]= temp;
-                temp = temp + scale;
-                Log.i(TAG,"SP floatArray: "+floatArray[j]);
+            result = new float[numColors];
+            for (int i = 0; i < numColors; i++) {
+                result[i] =(float) floatArrayGradient.get(i).floatValue();
+                Log.i(TAG,"WE gradient position: "+result[i]);
             }
 
+            result[numColors-1] = 1;
 
-            //profile.getArrayList().size()
             for (int j=0;j<numColors;j++){
                 arrColors[j] = Integer.parseInt(arrayList.get(j).toString(), 16)+0xFF000000;
+                Log.i(TAG,"WE farby :" +arrColors[j]);
             }
 
             ShapeDrawable.ShaderFactory shaderFactory = new ShapeDrawable.ShaderFactory() {
@@ -227,7 +245,7 @@ public class WorkingEdit extends AppCompatActivity {
                 public Shader resize(int width, int height) {
                     LinearGradient linearGradient = new LinearGradient(0, 0, width, height,
                             arrColors, //pouzity array farieb
-                            floatArray,
+                            result,
                             Shader.TileMode.REPEAT);
                     return linearGradient;
                 }

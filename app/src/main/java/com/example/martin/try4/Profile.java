@@ -8,10 +8,12 @@ public class Profile implements Serializable {
 
     private String objectName;
     private ArrayList<String> arrayColorList;
+    private ArrayList<Float> gradients;
 
-    public Profile(String objectName, ArrayList<String> arrayList){
+    public Profile(String objectName, ArrayList<String> arrayList, ArrayList<Float> gradients){
         this.objectName=objectName;
         this.arrayColorList=arrayList;
+        this.gradients=gradients;
     }
 
     public String getObjectName() {
@@ -28,5 +30,13 @@ public class Profile implements Serializable {
 
     public void setArrayList(ArrayList<String> arrayList) {
         this.arrayColorList = arrayList;
+    }
+
+    public void setGradients(ArrayList<Float> arrayList) {
+        this.gradients = gradients;
+    }
+
+    public ArrayList<Float> getGradients() {
+        return gradients;
     }
 }

@@ -16,11 +16,20 @@
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:id="@+id/editPositionCP"
+            android:layout_weight="0.4"
+            android:text="50"
+            android:gravity="center"
+            />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:id="@+id/editCP"
             android:layout_alignParentBottom="true"
             android:layout_alignParentStart="true"
             android:layout_alignParentEnd="true"
-            android:layout_weight="1"
+            android:layout_weight="0.4"
             android:gravity="center"
             android:text="ffffff" />
 
@@ -28,7 +37,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Select"
-            android:id="@+id/buttonCP" />
+            android:id="@+id/buttonCP"
+            android:layout_weight="0.2" />
+
     </LinearLayout>
 
     <TextView

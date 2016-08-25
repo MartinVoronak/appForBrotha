@@ -18,6 +18,8 @@ public class ColorPicker_try1 extends AppCompatActivity {
     int initialColor;
     Context skuska;
     Intent i;
+    String pickedPosition;
+    EditText eTextPosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,24 +31,7 @@ public class ColorPicker_try1 extends AppCompatActivity {
         //start color
         initialColor = Color.WHITE;
         eText = (EditText) findViewById(R.id.editCP);
-
-        ColorPickerDialog colorPickerDialog = new ColorPickerDialog(this, initialColor, new ColorPickerDialog.OnColorSelectedListener() {
-
-            @Override
-            public void onColorSelected(int color) {
-                Log.i(TAG, "CP cp vybrata farba: " + color);
-
-                //CONTENT
-                Intent i = new Intent();
-                i.putExtra("picked", Integer.toHexString(color).substring(2));
-                setResult(RESULT_OK, i);
-
-                finish();
-            }
-
-        });
-        colorPickerDialog.show();
-
+        eTextPosition =(EditText) findViewById(R.id.editPositionCP);
 
         Button button = (Button) findViewById(R.id.buttonCP);
         button.setOnClickListener(new View.OnClickListener() {
@@ -60,6 +45,7 @@ public class ColorPicker_try1 extends AppCompatActivity {
                         //CONTENT
                         Intent i = new Intent();
                         i.putExtra("picked", Integer.toHexString(color).substring(2));
+                        i.putExtra("pickedGradientPostion",eTextPosition.getText().toString());
                         setResult(RESULT_OK, i);
 
                         finish();

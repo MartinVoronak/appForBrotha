@@ -58,6 +58,9 @@ public class SingleProfile extends AppCompatActivity {
     PaintDrawable paint;
 
     int position;
+    float pickedGradientPosition;
+    ArrayList<Float> floatArrayGradient;
+    float[] result;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +80,8 @@ public class SingleProfile extends AppCompatActivity {
 
         //color preview of one profile
         arrayList = profile.getArrayList();
+        floatArrayGradient = profile.getGradients();
+        //floatArrayGradient = new ArrayList<Float>();
 
         list = (ListView) findViewById(R.id.mylistViewSP);
         cAdapter = new CustomAdapter(this, arrayList);
@@ -129,7 +134,7 @@ public class SingleProfile extends AppCompatActivity {
         myFabOK.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
-                Profile newProfile = new Profile(editTextSP.getText().toString(),arrayList);
+                Profile newProfile = new Profile(editTextSP.getText().toString(),arrayList,floatArrayGradient);
                 profiles.set(objectID,newProfile);
 
                 JSONArray jsonArrayDeserialization= new JSONArray();
@@ -138,15 +143,21 @@ public class SingleProfile extends AppCompatActivity {
                 {
                     JSONArray JSColors = new JSONArray();
                     JSONObject JSONRootObject = new JSONObject();
+                    JSONArray JSGradients = new JSONArray();
 
                     for (int i = 0; i < profiles.get(j).getArrayList().size(); i++){
                         JSColors.put(profiles.get(j).getArrayList().get(i));
+                    }
+
+                    for (int i = 0; i < arrayList.size(); i++){
+                        JSGradients.put(floatArrayGradient.get(i).toString());
                     }
 
                     JSONObject js1 = new JSONObject();
                     try {
                         js1.put("name", profiles.get(j).getObjectName());
                         js1.put("colors", JSColors);
+                        js1.put("gradients", JSGradients);
 
                         jsonArrayDeserialization.put(js1);
 
@@ -178,22 +189,31 @@ public class SingleProfile extends AppCompatActivity {
             case 1:
 
                 if (resultCode == RESULT_OK){
-                    pickedColor=data.getStringExtra("picked");
-                    Log.i(TAG, "SP prenesena farba: " + pickedColor);
+                    pickedColor = data.getStringExtra("picked");
+
+                    if (arrayList.size()!=0) {
+                        pickedGradientPosition = (float) Float.parseFloat(data.getStringExtra("pickedGradientPostion")) / 100;
+                        Log.i(TAG, "WE prenesena farba a pozicia: " + pickedColor +" "+pickedGradientPosition);
+                    }
+                    else {
+                        pickedGradientPosition = 0;
+                    }
 
                     arrayList.add(pickedColor);
-                    //cAdapter = new CustomAdapter(this, arrayList);
+                    floatArrayGradient.add(pickedGradientPosition);
                     list.setAdapter(cAdapter);
 
                 }else if(resultCode == RESULT_CANCELED){
-                    Log.i(TAG,"nepreniesla sa farba");
+                    Log.i(TAG,"WE nepreniesla sa farba");
                 }
 
                 break;
             case 2:
                 if (resultCode == RESULT_OK) {
                     pickedColor = data.getStringExtra("picked");
+                    pickedGradientPosition = (float) Float.parseFloat(data.getStringExtra("pickedGradientPostion"))/100;
                     arrayList.set(pickedPosition, pickedColor);
+                    floatArrayGradient.set(pickedPosition,pickedGradientPosition);
                     list.setAdapter(cAdapter);
 
                     Log.i(TAG, "zmena farby na poz: " + pickedPosition);
@@ -230,16 +250,19 @@ public class SingleProfile extends AppCompatActivity {
 
             for (int j = 0; j < profiles.size(); j++) {
                 JSONArray JSColors = new JSONArray();
+                JSONArray JSGradients = new JSONArray();
                 JSONObject JSONRootObject = new JSONObject();
 
                 for (int i = 0; i < profiles.get(j).getArrayList().size(); i++) {
                     JSColors.put(profiles.get(j).getArrayList().get(i));
+                    JSGradients.put(profiles.get(j).getGradients().get(i));
                 }
 
                 JSONObject js1 = new JSONObject();
                 try {
                     js1.put("name", profiles.get(j).getObjectName());
                     js1.put("colors", JSColors);
+                    js1.put("gradients", JSGradients);
 
                     jsonArrayDeserialization.put(js1);
 
@@ -265,24 +288,23 @@ public class SingleProfile extends AppCompatActivity {
 
         scale = (float) 1/(numColors-1);
         Log.i(TAG, "SP scale: " + scale);
+        Log.i(TAG, "SP numColors: " + numColors);
 
         if (numColors>1){
 
-            floatArray = new float[numColors];
-            floatArray[0]=0;
-            floatArray[numColors-1] = 1;
-
-            float temp = scale;
-            for (int j=1;j<numColors-1;j++){
-                floatArray[j]= temp;
-                temp = temp + scale;
-                Log.i(TAG,"SP floatArray: "+floatArray[j]);
+            result = new float[numColors];
+            for (int i = 0; i < numColors; i++) {
+                //TODO set floatArrayGradient
+                result[i] =(float) floatArrayGradient.get(i).floatValue();
+                Log.i(TAG,"WE gradient position: "+result[i]);
             }
 
+            result[numColors-1] = 1;
 
-            //profile.getArrayList().size()
             for (int j=0;j<numColors;j++){
-                arrColors[j] = Integer.parseInt(profile.getArrayList().get(j).toString(), 16)+0xFF000000;
+
+                arrColors[j] = Integer.parseInt(arrayList.get(j).toString(), 16)+0xFF000000;
+                Log.i(TAG,"WE farby :" +arrColors[j]);
             }
 
             ShapeDrawable.ShaderFactory shaderFactory = new ShapeDrawable.ShaderFactory() {
@@ -290,7 +312,7 @@ public class SingleProfile extends AppCompatActivity {
                 public Shader resize(int width, int height) {
                     LinearGradient linearGradient = new LinearGradient(0, 0, width, height,
                             arrColors, //pouzity array farieb
-                            floatArray,
+                            result,
                             Shader.TileMode.REPEAT);
                     return linearGradient;
                 }
@@ -305,7 +327,7 @@ public class SingleProfile extends AppCompatActivity {
         else if (numColors==1){
 
             layout = findViewById(R.id.gradient);
-            layout.setBackgroundColor(Integer.parseInt(profile.getArrayList().get(0).toString(), 16)+0xFF000000);
+            layout.setBackgroundColor(Integer.parseInt(arrayList.get(0).toString(), 16)+0xFF000000);
         }
     }
 

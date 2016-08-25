@@ -1,6 +1,7 @@
 package com.example.martin.try4;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.design.widget.FloatingActionButton;
@@ -38,6 +39,9 @@ public class HomeScreen extends AppCompatActivity {
         });
 
         SharedPreferences.Editor editor = getSharedPreferences("MyPrefsFile", MODE_PRIVATE).edit();
+
+        //editor.clear();
+        //editor.commit();
     }
 
     @Override
@@ -65,17 +69,22 @@ public class HomeScreen extends AppCompatActivity {
                         //name
                         name = jsonObject.optString("name").toString();
                         JSONArray jsonArrayColors = jsonObject.getJSONArray("colors");
+                        JSONArray jsonArrayGradient = jsonObject.getJSONArray("gradients");
 
-                        //colors
+                        //colors and gradients
                         ArrayList<String> profileListColors = new ArrayList<String>();
+                        ArrayList<Float> profileListGradients = new ArrayList<Float>();
 
                         for(int j=0; j < jsonArrayColors.length(); j++) {
 
                             String color = jsonArrayColors.get(j).toString();
                             profileListColors.add(color);
+
+                            float gradient = Float.parseFloat(jsonArrayGradient.get(j).toString());
+                            profileListGradients.add(gradient);
                         }
 
-                        Profile profile = new Profile(name,profileListColors);
+                        Profile profile = new Profile(name,profileListColors,profileListGradients);
                         profiles.add(profile);
                     }
                 } catch (JSONException e) {
