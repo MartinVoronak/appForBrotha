@@ -60,10 +60,8 @@ public class CustomListAdapter extends BaseAdapter {
 
         // get current item to be displayed
         Profile currentItem = (Profile) getItem(position);
-
-        // get the TextView for item name and item description
-        //TextView textViewItemName = (TextView) convertView.findViewById(R.id.listID);
         viewHolder.itemName.setText(currentItem.getObjectName());
+
 
         int numColors = currentItem.getArrayList().size();
 
@@ -103,6 +101,8 @@ public class CustomListAdapter extends BaseAdapter {
             paint.setShape(new RectShape());
             paint.setShaderFactory(shaderFactory);
 
+            paint.setCornerRadius(100);
+
             viewHolder.itemName.setBackgroundDrawable(paint);
         }
         else if (numColors == 1) {
@@ -112,9 +112,9 @@ public class CustomListAdapter extends BaseAdapter {
             arrColors[1] = Integer.parseInt(currentItem.getArrayList().get(0).toString(), 16) + 0xFF000000;
 
 
-            float[] result = new float[numColors];
+            //float[] result = new float[numColors];
 
-            result = new float[2];
+            float[] result = new float[2];
             result[0]=0;
             result[1]=1;
 
@@ -134,6 +134,8 @@ public class CustomListAdapter extends BaseAdapter {
             PaintDrawable paint = new PaintDrawable();
             paint.setShape(new RectShape());
             paint.setShaderFactory(shaderFactory);
+
+            paint.setCornerRadius(100);
 
             viewHolder.itemName.setBackgroundDrawable(paint);
         }
