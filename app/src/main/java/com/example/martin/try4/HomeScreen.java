@@ -2,6 +2,7 @@ package com.example.martin.try4;
 
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.LinearGradient;
@@ -11,6 +12,7 @@ import android.graphics.drawable.PaintDrawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.RectShape;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -34,9 +36,9 @@ import java.util.ArrayList;
 public class HomeScreen extends AppCompatActivity {
 
     private static final String TAG = "MyActivity";
-
     ArrayList<Profile> profiles;
 
+    CustomListAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,16 +115,10 @@ public class HomeScreen extends AppCompatActivity {
                     e.printStackTrace();
                 }
         }
-/*
-        ArrayAdapter<Profile> allAdapter = new CustomAdapterGradient(this, profiles);
-        ListView menuListView = (ListView) findViewById(R.id.listViewHS);
-        menuListView.setAdapter(allAdapter);
-*/
 
-        CustomListAdapter adapter = new CustomListAdapter(this, profiles);
+        adapter = new CustomListAdapter(this, profiles);
         ListView menuListView  = (ListView) findViewById(R.id.listViewHS);
         menuListView.setAdapter(adapter);
-
 
         menuListView.setOnItemClickListener(
                 new AdapterView.OnItemClickListener() {
@@ -148,7 +144,10 @@ public class HomeScreen extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        deleteData();
+
+        AlertDialog diaBox = AskOption();
+        diaBox.show();
+
         return true;
     }
 
@@ -158,6 +157,35 @@ public class HomeScreen extends AppCompatActivity {
         editor.clear();
         editor.commit();
     }
-    /*------------------------------------------------------------------------------------------------------------------------------------------*/
+
+    private AlertDialog AskOption()
+    {
+        AlertDialog myQuittingDialogBox =new AlertDialog.Builder(this)
+                .setTitle("Delete")
+                .setMessage("Do you wish to Delete all ?")
+
+                .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int whichButton) {
+
+                        deleteData();
+                        profiles.clear();
+                        adapter.updateResults(profiles);
+                        dialog.dismiss();
+                    }
+
+                })
+
+
+
+                .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        dialog.dismiss();
+                    }
+                })
+                .create();
+        return myQuittingDialogBox;
+    }
 
 }

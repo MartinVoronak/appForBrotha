@@ -40,21 +40,30 @@ public class CustomListAdapter extends BaseAdapter {
         return position;
     }
 
+    public void updateResults(ArrayList<Profile> results) {
+        items = results;
+        //Triggers the list update
+        notifyDataSetChanged();
+    }
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        // inflate the layout for each list row
+        ViewHolder viewHolder;
+
         if (convertView == null) {
-            convertView = LayoutInflater.from(context).
-                    inflate(R.layout.customrow, parent, false);
+            convertView = LayoutInflater.from(context).inflate(R.layout.customrow, parent, false);
+            viewHolder = new ViewHolder(convertView);
+            convertView.setTag(viewHolder);
+        } else {
+            viewHolder = (ViewHolder) convertView.getTag();
         }
 
         // get current item to be displayed
         Profile currentItem = (Profile) getItem(position);
 
         // get the TextView for item name and item description
-        TextView textViewItemName = (TextView) convertView.findViewById(R.id.listID);
-
-        textViewItemName.setText(currentItem.getObjectName());
+        //TextView textViewItemName = (TextView) convertView.findViewById(R.id.listID);
+        viewHolder.itemName.setText(currentItem.getObjectName());
 
         int numColors = currentItem.getArrayList().size();
 
@@ -94,7 +103,7 @@ public class CustomListAdapter extends BaseAdapter {
             paint.setShape(new RectShape());
             paint.setShaderFactory(shaderFactory);
 
-            textViewItemName.setBackgroundDrawable(paint);
+            viewHolder.itemName.setBackgroundDrawable(paint);
         }
         else if (numColors == 1) {
 
@@ -126,12 +135,20 @@ public class CustomListAdapter extends BaseAdapter {
             paint.setShape(new RectShape());
             paint.setShaderFactory(shaderFactory);
 
-            textViewItemName.setBackgroundDrawable(paint);
+            viewHolder.itemName.setBackgroundDrawable(paint);
         }
         else {
-            textViewItemName.setText("empty object");
+            viewHolder.itemName.setText("empty object");
         }
 
         return convertView;
+    }
+
+    private class ViewHolder {
+        TextView itemName;
+
+        public ViewHolder(View view) {
+            itemName = (TextView) view.findViewById(R.id.listID);
+        }
     }
 }

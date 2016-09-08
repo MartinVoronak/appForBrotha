@@ -111,7 +111,7 @@ public class SingleProfile extends AppCompatActivity {
 
                 position=index;
 
-                AlertDialog diaBox = AskOption();
+                AlertDialog diaBox = AskOptionRemoveColor();
                 diaBox.show();
 
                 return true;
@@ -240,48 +240,9 @@ public class SingleProfile extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        profiles.remove(objectID);
+        AlertDialog diaBox = AskOptionDelteProfile();
+        diaBox.show();
 
-        if (profiles.isEmpty()) {
-            Log.i(TAG,"SP osamoteny vymazany");
-
-            SharedPreferences settings = getSharedPreferences("MyPrefsFile", Context.MODE_PRIVATE);
-            settings.edit().remove("savedData").commit();
-        }
-        else {
-            JSONArray jsonArrayDeserialization = new JSONArray();
-
-            for (int j = 0; j < profiles.size(); j++) {
-                JSONArray JSColors = new JSONArray();
-                JSONArray JSGradients = new JSONArray();
-                JSONObject JSONRootObject = new JSONObject();
-
-                for (int i = 0; i < profiles.get(j).getArrayList().size(); i++) {
-                    JSColors.put(profiles.get(j).getArrayList().get(i));
-                    JSGradients.put(profiles.get(j).getGradients().get(i));
-                }
-
-                JSONObject js1 = new JSONObject();
-                try {
-                    js1.put("name", profiles.get(j).getObjectName());
-                    js1.put("colors", JSColors);
-                    js1.put("gradients", JSGradients);
-
-                    jsonArrayDeserialization.put(js1);
-
-                    JSONRootObject.put("data", jsonArrayDeserialization);
-                    Log.i(TAG, "vytvoreny json " + JSONRootObject.toString());
-
-                    SharedPreferences.Editor editor = getSharedPreferences("MyPrefsFile", MODE_PRIVATE).edit();
-                    editor.putString("savedData", JSONRootObject.toString());
-                    editor.commit();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-            }
-        }
-        finish();
         return true;
     }
 
@@ -334,7 +295,7 @@ public class SingleProfile extends AppCompatActivity {
         }
     }
 
-    private AlertDialog AskOption()
+    private AlertDialog AskOptionRemoveColor()
     {
         AlertDialog myQuittingDialogBox =new AlertDialog.Builder(this)
                 //set message, title, and icon
@@ -367,5 +328,80 @@ public class SingleProfile extends AppCompatActivity {
                 .create();
         return myQuittingDialogBox;
 
+    }
+
+    private AlertDialog AskOptionDelteProfile()
+    {
+        AlertDialog myQuittingDialogBox =new AlertDialog.Builder(this)
+                //set message, title, and icon
+                .setTitle("Delete")
+                .setMessage("Do you wish to Delete Profile ?")
+
+                .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int whichButton) {
+
+                        deleteCurrentProfile();
+                        dialog.dismiss();
+                    }
+
+                })
+
+
+
+                .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        dialog.dismiss();
+                    }
+                })
+                .create();
+        return myQuittingDialogBox;
+
+    }
+
+    void deleteCurrentProfile(){
+        profiles.remove(objectID);
+
+        if (profiles.isEmpty()) {
+            Log.i(TAG,"SP osamoteny vymazany");
+
+            SharedPreferences settings = getSharedPreferences("MyPrefsFile", Context.MODE_PRIVATE);
+            settings.edit().remove("savedData").commit();
+        }
+        else {
+            JSONArray jsonArrayDeserialization = new JSONArray();
+
+            for (int j = 0; j < profiles.size(); j++) {
+                JSONArray JSColors = new JSONArray();
+                JSONArray JSGradients = new JSONArray();
+                JSONObject JSONRootObject = new JSONObject();
+
+                for (int i = 0; i < profiles.get(j).getArrayList().size(); i++) {
+                    JSColors.put(profiles.get(j).getArrayList().get(i));
+                    JSGradients.put(profiles.get(j).getGradients().get(i));
+                }
+
+                JSONObject js1 = new JSONObject();
+                try {
+                    js1.put("name", profiles.get(j).getObjectName());
+                    js1.put("colors", JSColors);
+                    js1.put("gradients", JSGradients);
+
+                    jsonArrayDeserialization.put(js1);
+
+                    JSONRootObject.put("data", jsonArrayDeserialization);
+                    Log.i(TAG, "vytvoreny json " + JSONRootObject.toString());
+
+                    SharedPreferences.Editor editor = getSharedPreferences("MyPrefsFile", MODE_PRIVATE).edit();
+                    editor.putString("savedData", JSONRootObject.toString());
+                    editor.commit();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }
+        finish();
     }
 }
