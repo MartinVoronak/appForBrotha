@@ -1,17 +1,31 @@
 package com.example.martin.try4;
 
-
+import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.LinearGradient;
+import android.graphics.Shader;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.PaintDrawable;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.RectShape;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -30,6 +44,8 @@ public class HomeScreen extends AppCompatActivity {
         setContentView(R.layout.activity_home_screen);
         Log.i(TAG, "---------------------------------------------------------------------------------------------------------");
 
+        //deleteData();
+
         FloatingActionButton floatingActionButton1 = (FloatingActionButton) findViewById(R.id.fabHS);
         floatingActionButton1.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -38,16 +54,23 @@ public class HomeScreen extends AppCompatActivity {
             }
         });
 
-        SharedPreferences.Editor editor = getSharedPreferences("MyPrefsFile", MODE_PRIVATE).edit();
+        FloatingActionButton floatingActionButton2 = (FloatingActionButton) findViewById(R.id.fabHSsend);
+        floatingActionButton2.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
 
-        //editor.clear();
-        //editor.commit();
+                Intent i = new Intent(HomeScreen.this, PairDevice.class);
+                startActivity(i);
+            }
+        });
+
+
+        SharedPreferences.Editor editor = getSharedPreferences("MyPrefsFile", MODE_PRIVATE).edit();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        Log.i(TAG,"HS RESUMED");
+        Log.i(TAG, "HS RESUMED");
         String name = "";
 
         profiles = new ArrayList<Profile>();
@@ -56,7 +79,6 @@ public class HomeScreen extends AppCompatActivity {
         String restoredText = prefs.getString("savedData", null);
         if (restoredText != null) {
             Log.i(TAG, "HS Savenuty JSON: " + restoredText);
-
             try {
                 JSONObject  jsonRootObjectDeserialization = new JSONObject(restoredText);
                 JSONArray jsonArrayDeserialization = jsonRootObjectDeserialization.optJSONArray("data");
@@ -91,10 +113,16 @@ public class HomeScreen extends AppCompatActivity {
                     e.printStackTrace();
                 }
         }
-
-        ArrayAdapter<Profile> allAdapter = new CustomAdapterProfiles(this, profiles);
+/*
+        ArrayAdapter<Profile> allAdapter = new CustomAdapterGradient(this, profiles);
         ListView menuListView = (ListView) findViewById(R.id.listViewHS);
         menuListView.setAdapter(allAdapter);
+*/
+
+        CustomListAdapter adapter = new CustomListAdapter(this, profiles);
+        ListView menuListView  = (ListView) findViewById(R.id.listViewHS);
+        menuListView.setAdapter(adapter);
+
 
         menuListView.setOnItemClickListener(
                 new AdapterView.OnItemClickListener() {
@@ -109,7 +137,27 @@ public class HomeScreen extends AppCompatActivity {
                 }
         );
 
-
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menudelete, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        deleteData();
+        return true;
+    }
+
+    void deleteData(){
+
+        SharedPreferences.Editor editor = getSharedPreferences("MyPrefsFile", MODE_PRIVATE).edit();
+        editor.clear();
+        editor.commit();
+    }
+    /*------------------------------------------------------------------------------------------------------------------------------------------*/
 
 }

@@ -52,7 +52,6 @@ public class SingleProfile extends AppCompatActivity {
     //gradient
     int[] arrColors;
     int numColors;
-    float floatArray[];
     float scale;
     View layout;
     PaintDrawable paint;
@@ -97,6 +96,7 @@ public class SingleProfile extends AppCompatActivity {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long l) {
                         Intent i = new Intent(SingleProfile.this, ColorPicker_try1.class);
+                        i.putExtra("objectColor", arrayList.get(position));
                         startActivityForResult(i, REQ_CODE_CHANGE);
                         pickedPosition = position;
                     }
@@ -124,6 +124,7 @@ public class SingleProfile extends AppCompatActivity {
             public void onClick(View v) {
 
                 Intent i = new Intent(SingleProfile.this, ColorPicker_try1.class);
+                i.putExtra("objectColor", "ffffff");
                 startActivityForResult(i, REQ_CODE_NEW); //RCN == 1
             }
         });
@@ -210,6 +211,8 @@ public class SingleProfile extends AppCompatActivity {
                 break;
             case 2:
                 if (resultCode == RESULT_OK) {
+
+                    //TODO changing colors is buggy
                     pickedColor = data.getStringExtra("picked");
                     pickedGradientPosition = (float) Float.parseFloat(data.getStringExtra("pickedGradientPostion"))/100;
                     arrayList.set(pickedPosition, pickedColor);
@@ -294,7 +297,7 @@ public class SingleProfile extends AppCompatActivity {
 
             result = new float[numColors];
             for (int i = 0; i < numColors; i++) {
-                //TODO set floatArrayGradient
+
                 result[i] =(float) floatArrayGradient.get(i).floatValue();
                 Log.i(TAG,"WE gradient position: "+result[i]);
             }

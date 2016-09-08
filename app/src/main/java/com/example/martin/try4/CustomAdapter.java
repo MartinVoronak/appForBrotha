@@ -26,12 +26,11 @@ public class CustomAdapter extends ArrayAdapter<ArrayList<String>> {
         LayoutInflater listInflater = LayoutInflater.from(getContext());
         View customView = listInflater.inflate(R.layout.customrow2, parent, false);
 
-        String singleItem = myArrayList.get(position);
-        TextView profileText = (TextView) customView.findViewById(R.id.profileColorName);
+        String itemText = myArrayList.get(position);
+        TextView singeItem = (TextView) customView.findViewById(R.id.profileColorName);
         TextView  profileColor = (TextView) customView.findViewById(R.id.profileColorPreview);
 
-        profileText.setText(singleItem);
-        //set background of drawable
+        singeItem.setText(itemText);
         profileColor.getBackground().setColorFilter(Color.parseColor("#"+myArrayList.get(position).toString()), PorterDuff.Mode.SRC_ATOP);
 
         return customView;

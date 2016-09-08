@@ -25,4 +25,16 @@
         android:layout_marginLeft="11dp"
         android:layout_marginRight="11dp"/>
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fabHSsend"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/bluetooth"
+
+        android:layout_marginBottom="11dp"
+        android:layout_marginLeft="11dp"
+        android:layout_marginRight="11dp"/>
+
 </RelativeLayout>

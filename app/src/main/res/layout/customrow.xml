@@ -24,7 +24,6 @@
             android:textSize="26dp"
             android:gravity="center"
             android:tag="bo"
-            android:background="@drawable/rounded_textview"
             android:paddingTop="4dp"
             android:paddingBottom="0dp"
             android:layout_weight="0.92" />

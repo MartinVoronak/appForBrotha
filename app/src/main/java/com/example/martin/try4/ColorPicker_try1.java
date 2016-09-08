@@ -28,9 +28,14 @@ public class ColorPicker_try1 extends AppCompatActivity {
 
         skuska = this;
 
+        eText = (EditText) findViewById(R.id.editCP);
+        Intent i = getIntent();
+        String color = i.getSerializableExtra("objectColor").toString();
+        eText.setText(color);
+
         //start color
         initialColor = Color.WHITE;
-        eText = (EditText) findViewById(R.id.editCP);
+
         eTextPosition =(EditText) findViewById(R.id.editPositionCP);
 
         Button button = (Button) findViewById(R.id.buttonCP);

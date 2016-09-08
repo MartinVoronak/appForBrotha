@@ -31,7 +31,7 @@ import java.util.ArrayList;
 
 public class WorkingEdit extends AppCompatActivity {
 
-    final static int REQ_CODE = 1;
+    //final static int REQ_CODE = 1;
     private static final String TAG = "MyActivity";
     String pickedColor;
     ArrayAdapter<String> adapter;
@@ -68,6 +68,7 @@ public class WorkingEdit extends AppCompatActivity {
             myFab.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     Intent i = new Intent(WorkingEdit.this, ColorPicker_try1.class);
+                    i.putExtra("objectColor", "ffffff");
                     startActivityForResult(i, REQ_CODE_NEW);
                 }
             });
@@ -82,6 +83,7 @@ public class WorkingEdit extends AppCompatActivity {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long l) {
                         Intent i = new Intent(WorkingEdit.this, ColorPicker_try1.class);
+                        i.putExtra("objectColor", arrayList.get(position));
                         startActivityForResult(i, REQ_CODE_CHANGE);
                         pickedPosition = position;
                     }
