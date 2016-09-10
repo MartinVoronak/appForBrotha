@@ -39,4 +39,8 @@ public class Profile implements Serializable {
     public ArrayList<Float> getGradients() {
         return gradients;
     }
+
+    public void addGradient(Float f){
+        gradients.add(f);
+    }
 }

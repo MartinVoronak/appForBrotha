@@ -52,7 +52,6 @@ public class SingleProfile extends AppCompatActivity {
     //gradient
     int[] arrColors;
     int numColors;
-    float scale;
     View layout;
     PaintDrawable paint;
 
@@ -80,7 +79,8 @@ public class SingleProfile extends AppCompatActivity {
         //color preview of one profile
         arrayList = profile.getArrayList();
         floatArrayGradient = profile.getGradients();
-        //floatArrayGradient = new ArrayList<Float>();
+
+        Log.i(TAG,"SP gradient positions: "+floatArrayGradient.toString());
 
         list = (ListView) findViewById(R.id.mylistViewSP);
         cAdapter = new CustomAdapter(this, arrayList);
@@ -110,6 +110,7 @@ public class SingleProfile extends AppCompatActivity {
             public boolean onItemLongClick(AdapterView<?> arg0, View v, int index, long arg3) {
 
                 position=index;
+                Log.i(TAG,"SP longclick position: "+position);
 
                 AlertDialog diaBox = AskOptionRemoveColor();
                 diaBox.show();
@@ -131,12 +132,23 @@ public class SingleProfile extends AppCompatActivity {
 
 
         //OK button
-        FloatingActionButton myFabOK = (FloatingActionButton) findViewById(R.id.fabSPC);
+        FloatingActionButton myFabOK = (FloatingActionButton) findViewById(R.id.fabSPC);        //TODO check after removing one gradient
         myFabOK.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
                 Profile newProfile = new Profile(editTextSP.getText().toString(),arrayList,floatArrayGradient);
-                profiles.set(objectID,newProfile);
+
+                Log.i(TAG,"SP before retake of color: "+" colors  "+profiles.get(objectID).getArrayList().toString() +"  gradients  "+ profiles.get(objectID).getGradients().toString());
+                profiles.set(objectID, newProfile);
+                Log.i(TAG, "SP after retake of color: " + " colors  " + profiles.get(objectID).getArrayList().toString() + "  gradients  " + profiles.get(objectID).getGradients().toString());
+
+                Log.i(TAG,"SP object colors: " + newProfile.getArrayList().toString());
+                Log.i(TAG,"SP object gradient positions: "+newProfile.getGradients().toString());
+
+                //check gradients
+                for (int i = 0; i < profiles.size(); i++){
+                    profiles.get(i).getGradients().toString();
+                }
 
                 JSONArray jsonArrayDeserialization= new JSONArray();
 
@@ -148,12 +160,9 @@ public class SingleProfile extends AppCompatActivity {
 
                     for (int i = 0; i < profiles.get(j).getArrayList().size(); i++){
                         JSColors.put(profiles.get(j).getArrayList().get(i));
+                        JSGradients.put(profiles.get(j).getGradients().get(i));
                     }
-
-                    for (int i = 0; i < arrayList.size(); i++){
-                        JSGradients.put(floatArrayGradient.get(i).toString());
-                    }
-
+                    
                     JSONObject js1 = new JSONObject();
                     try {
                         js1.put("name", profiles.get(j).getObjectName());
@@ -163,7 +172,7 @@ public class SingleProfile extends AppCompatActivity {
                         jsonArrayDeserialization.put(js1);
 
                         JSONRootObject.put("data",jsonArrayDeserialization);
-                        Log.i(TAG, "vytvoreny json " + JSONRootObject.toString());
+                        Log.i(TAG, "SP vytvoreny json " + JSONRootObject.toString());
 
                         SharedPreferences.Editor editor = getSharedPreferences("MyPrefsFile", MODE_PRIVATE).edit();
                         editor.putString("savedData", JSONRootObject.toString());
@@ -194,7 +203,7 @@ public class SingleProfile extends AppCompatActivity {
 
                     if (arrayList.size()!=0) {
                         pickedGradientPosition = (float) Float.parseFloat(data.getStringExtra("pickedGradientPostion")) / 100;
-                        Log.i(TAG, "WE prenesena farba a pozicia: " + pickedColor +" "+pickedGradientPosition);
+                        Log.i(TAG, "SP prenesena farba a pozicia: " + pickedColor +" "+pickedGradientPosition);
                     }
                     else {
                         pickedGradientPosition = 0;
@@ -205,7 +214,7 @@ public class SingleProfile extends AppCompatActivity {
                     list.setAdapter(cAdapter);
 
                 }else if(resultCode == RESULT_CANCELED){
-                    Log.i(TAG,"WE nepreniesla sa farba");
+                    Log.i(TAG,"SP nepreniesla sa farba");
                 }
 
                 break;
@@ -250,8 +259,6 @@ public class SingleProfile extends AppCompatActivity {
         numColors = arrayList.size();
         arrColors = new int[numColors];
 
-        scale = (float) 1/(numColors-1);
-        Log.i(TAG, "SP scale: " + scale);
         Log.i(TAG, "SP numColors: " + numColors);
 
         if (numColors>1){
@@ -260,7 +267,7 @@ public class SingleProfile extends AppCompatActivity {
             for (int i = 0; i < numColors; i++) {
 
                 result[i] =(float) floatArrayGradient.get(i).floatValue();
-                Log.i(TAG,"WE gradient position: "+result[i]);
+                Log.i(TAG,"SP gradient position: "+result[i]);
             }
 
             result[numColors-1] = 1;
@@ -268,7 +275,7 @@ public class SingleProfile extends AppCompatActivity {
             for (int j=0;j<numColors;j++){
 
                 arrColors[j] = Integer.parseInt(arrayList.get(j).toString(), 16)+0xFF000000;
-                Log.i(TAG,"WE farby :" +arrColors[j]);
+                Log.i(TAG,"SP farby :" +arrColors[j]);
             }
 
             ShapeDrawable.ShaderFactory shaderFactory = new ShapeDrawable.ShaderFactory() {
@@ -306,8 +313,13 @@ public class SingleProfile extends AppCompatActivity {
 
                     public void onClick(DialogInterface dialog, int whichButton) {
 
-                        Log.i(TAG,"SP to delete: "+position);
+                        Log.i(TAG, "SP to delete: " + position);
                         arrayList.remove(position);
+
+                        //was missing deletion of float gradient
+                        floatArrayGradient.remove(position);
+                        Log.i(TAG,"SP float gradients after remove: "+floatArrayGradient.toString());
+
                         list.setAdapter(cAdapter);
 
                         setGradient();
@@ -340,18 +352,14 @@ public class SingleProfile extends AppCompatActivity {
                 .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
 
                     public void onClick(DialogInterface dialog, int whichButton) {
-
                         deleteCurrentProfile();
                         dialog.dismiss();
                     }
 
                 })
 
-
-
                 .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-
                         dialog.dismiss();
                     }
                 })
@@ -364,7 +372,7 @@ public class SingleProfile extends AppCompatActivity {
         profiles.remove(objectID);
 
         if (profiles.isEmpty()) {
-            Log.i(TAG,"SP osamoteny vymazany");
+            Log.i(TAG,"SP osamoteny, vymazany");
 
             SharedPreferences settings = getSharedPreferences("MyPrefsFile", Context.MODE_PRIVATE);
             settings.edit().remove("savedData").commit();

@@ -47,7 +47,7 @@ public class WorkingEdit extends AppCompatActivity {
     int[] arrColors;
     int numColors;
     float floatArray[];
-    float scale;
+    //float scale;
     View layout;
     PaintDrawable paint;
 
@@ -64,7 +64,7 @@ public class WorkingEdit extends AppCompatActivity {
         profileArray = new ArrayList<Profile>();
         floatArrayGradient = new ArrayList<Float>();
 
-            FloatingActionButton myFab = (FloatingActionButton) findViewById(R.id.fabWE);
+            FloatingActionButton myFab = (FloatingActionButton) findViewById(R.id.fabWE);       //TODO je preneseny gradient position ??
             myFab.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     Intent i = new Intent(WorkingEdit.this, ColorPicker_try1.class);
@@ -138,6 +138,7 @@ public class WorkingEdit extends AppCompatActivity {
 
                     for (int i = 0; i < arrayList.size(); i++){
                         JSGradients.put(floatArrayGradient.get(i).toString());
+                        Log.i(TAG,"create JSON gradient: "+floatArrayGradient.get(i).toString());
                     }
 
                     try {
@@ -171,7 +172,7 @@ public class WorkingEdit extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        switch(requestCode){
+        switch(requestCode){        //new color
             case 1:
 
                 if (resultCode == RESULT_OK){
@@ -182,7 +183,7 @@ public class WorkingEdit extends AppCompatActivity {
                         Log.i(TAG, "WE prenesena farba a pozicia: " + pickedColor +" "+pickedGradientPosition);
                     }
                     else {
-                        pickedGradientPosition = 0;
+                        pickedGradientPosition = 0;         //TODO check this do we need this ?     //might crash if someone picks 2 times 0 ??
                     }
 
                     arrayList.add(pickedColor);
@@ -194,7 +195,7 @@ public class WorkingEdit extends AppCompatActivity {
                 }
 
                 break;
-            case 2:
+            case 2:     //retake color
                 if (resultCode == RESULT_OK) {
                     pickedColor = data.getStringExtra("picked");
                     pickedGradientPosition = (float) Float.parseFloat(data.getStringExtra("pickedGradientPostion"))/100;
@@ -223,9 +224,9 @@ public class WorkingEdit extends AppCompatActivity {
         numColors = arrayList.size();
         arrColors = new int[numColors];
 
-        scale = (float) 1/(numColors-1);
-        Log.i(TAG, "SP scale: " + scale);
-        Log.i(TAG, "SP numColors: " + numColors);
+        //scale = (float) 1/(numColors-1);
+        //Log.i(TAG, "WE scale: " + scale);
+        Log.i(TAG, "WE numColors: " + numColors);
 
         if (numColors>1){
 

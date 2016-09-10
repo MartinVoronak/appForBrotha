@@ -119,6 +119,7 @@ public class HomeScreen extends AppCompatActivity {
         adapter = new CustomListAdapter(this, profiles);
         ListView menuListView  = (ListView) findViewById(R.id.listViewHS);
         menuListView.setAdapter(adapter);
+        adapter.updateResults(profiles);
 
         menuListView.setOnItemClickListener(
                 new AdapterView.OnItemClickListener() {
