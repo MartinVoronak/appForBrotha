@@ -7,9 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
-
 import java.util.ArrayList;
 
+//PairDevice: bluethoot devices
 public class CustomAdapterBT extends ArrayAdapter<BTDevice> {
 
     ArrayList<BTDevice> myArrayList = null;

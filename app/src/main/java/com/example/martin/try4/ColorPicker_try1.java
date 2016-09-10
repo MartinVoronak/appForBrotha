@@ -11,15 +11,16 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import java.text.NumberFormat;
+
 public class ColorPicker_try1 extends AppCompatActivity {
 
     private static final String TAG = "MyActivity";
     EditText eText;
     int initialColor;
     Context skuska;
-    Intent i;
-    String pickedPosition;
     EditText eTextPosition;
+    float gradientPosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,15 +29,31 @@ public class ColorPicker_try1 extends AppCompatActivity {
 
         skuska = this;
 
+        //color
         eText = (EditText) findViewById(R.id.editCP);
+        //gradient
+        eTextPosition =(EditText) findViewById(R.id.editPositionCP);
+
         Intent i = getIntent();
+
         String color = i.getSerializableExtra("objectColor").toString();
         eText.setText(color);
+
+        boolean decision = Boolean.valueOf(i.getSerializableExtra("decision").toString());
+        Log.i(TAG,"CP decision: "+decision);
+        if (decision==true){    //nova farba
+            gradientPosition = 0f;
+        }
+        else {  //prenesena farba
+            gradientPosition =Float.parseFloat(i.getSerializableExtra("objectGradient").toString())*100;
+        }
 
         //start color
         initialColor = Color.WHITE;
 
-        eTextPosition =(EditText) findViewById(R.id.editPositionCP);
+
+        //NumberFormat.getInstance().format(gradientPosition) == oreze 20.0 na 20
+        eTextPosition.setText((NumberFormat.getInstance().format(gradientPosition)));
 
         Button button = (Button) findViewById(R.id.buttonCP);
         button.setOnClickListener(new View.OnClickListener() {

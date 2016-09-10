@@ -10,7 +10,6 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import java.util.ArrayList;
 
-
 //SINGLE PROFILE COLORS
 public class CustomAdapter extends ArrayAdapter<ArrayList<String>> {
 

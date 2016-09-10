@@ -76,8 +76,6 @@ public class PairDevice extends AppCompatActivity {
                 new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long l) {
-                        //Intent i = new Intent(SingleProfile.this, ColorPicker_try1.class);
-                        //i.putExtra("objectColor", arrayList.get(position));
                         Log.i(TAG, "PD picked device: " + arrayList.get(position).name);
 
                         Intent i = new Intent(PairDevice.this, BTrecieve.class);

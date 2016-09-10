@@ -97,6 +97,8 @@ public class SingleProfile extends AppCompatActivity {
                     public void onItemClick(AdapterView<?> parent, View view, int position, long l) {
                         Intent i = new Intent(SingleProfile.this, ColorPicker_try1.class);
                         i.putExtra("objectColor", arrayList.get(position));
+                        i.putExtra("decision",false);
+                        i.putExtra("objectGradient", floatArrayGradient.get(position));
                         startActivityForResult(i, REQ_CODE_CHANGE);
                         pickedPosition = position;
                     }
@@ -145,11 +147,6 @@ public class SingleProfile extends AppCompatActivity {
                 Log.i(TAG,"SP object colors: " + newProfile.getArrayList().toString());
                 Log.i(TAG,"SP object gradient positions: "+newProfile.getGradients().toString());
 
-                //check gradients
-                for (int i = 0; i < profiles.size(); i++){
-                    profiles.get(i).getGradients().toString();
-                }
-
                 JSONArray jsonArrayDeserialization= new JSONArray();
 
                 for (int j=0;j<profiles.size();j++)
@@ -162,7 +159,7 @@ public class SingleProfile extends AppCompatActivity {
                         JSColors.put(profiles.get(j).getArrayList().get(i));
                         JSGradients.put(profiles.get(j).getGradients().get(i));
                     }
-                    
+
                     JSONObject js1 = new JSONObject();
                     try {
                         js1.put("name", profiles.get(j).getObjectName());

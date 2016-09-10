@@ -46,7 +46,6 @@ public class WorkingEdit extends AppCompatActivity {
     //gradient
     int[] arrColors;
     int numColors;
-    float floatArray[];
     //float scale;
     View layout;
     PaintDrawable paint;
@@ -64,11 +63,12 @@ public class WorkingEdit extends AppCompatActivity {
         profileArray = new ArrayList<Profile>();
         floatArrayGradient = new ArrayList<Float>();
 
-            FloatingActionButton myFab = (FloatingActionButton) findViewById(R.id.fabWE);       //TODO je preneseny gradient position ??
+            FloatingActionButton myFab = (FloatingActionButton) findViewById(R.id.fabWE);
             myFab.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     Intent i = new Intent(WorkingEdit.this, ColorPicker_try1.class);
                     i.putExtra("objectColor", "ffffff");
+                    i.putExtra("decision",true);       //1 = nova farba, nemusim tahat z intentu gradient position
                     startActivityForResult(i, REQ_CODE_NEW);
                 }
             });
@@ -84,6 +84,8 @@ public class WorkingEdit extends AppCompatActivity {
                     public void onItemClick(AdapterView<?> parent, View view, int position, long l) {
                         Intent i = new Intent(WorkingEdit.this, ColorPicker_try1.class);
                         i.putExtra("objectColor", arrayList.get(position));
+                        i.putExtra("decision",false);       //0 = musim tahat z intentu v CP gradient
+                        i.putExtra("objectGradient", floatArrayGradient.get(position));
                         startActivityForResult(i, REQ_CODE_CHANGE);
                         pickedPosition = position;
                     }

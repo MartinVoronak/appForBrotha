@@ -20,27 +20,12 @@ public class Profile implements Serializable {
         return objectName;
     }
 
-    public void setObjectName(String objectName) {
-        this.objectName = objectName;
-    }
-
     public ArrayList<String> getArrayList() {
         return arrayColorList;
-    }
-
-    public void setArrayList(ArrayList<String> arrayList) {
-        this.arrayColorList = arrayList;
-    }
-
-    public void setGradients(ArrayList<Float> arrayList) {
-        this.gradients = gradients;
     }
 
     public ArrayList<Float> getGradients() {
         return gradients;
     }
 
-    public void addGradient(Float f){
-        gradients.add(f);
-    }
 }

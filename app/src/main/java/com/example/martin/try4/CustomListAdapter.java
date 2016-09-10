@@ -3,7 +3,6 @@ package com.example.martin.try4;
 import android.content.Context;
 import android.graphics.LinearGradient;
 import android.graphics.Shader;
-import android.graphics.drawable.Drawable;
 import android.graphics.drawable.PaintDrawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.RectShape;
@@ -12,9 +11,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
-
 import java.util.ArrayList;
 
+
+//HOMESCREEN
 public class CustomListAdapter extends BaseAdapter {
     private Context context; //context
     private ArrayList<Profile> items; //data source of the list adapter
