@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import java.text.NumberFormat;
 
@@ -51,32 +52,65 @@ public class ColorPicker_try1 extends AppCompatActivity {
         //start color
         initialColor = Color.WHITE;
 
-
         //NumberFormat.getInstance().format(gradientPosition) == oreze 20.0 na 20
         eTextPosition.setText((NumberFormat.getInstance().format(gradientPosition)));
 
         Button button = (Button) findViewById(R.id.buttonCP);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                ColorPickerDialog colorPickerDialog = new ColorPickerDialog(skuska, Integer.parseInt(eText.getText().toString(), 16) + 0xFF000000, new ColorPickerDialog.OnColorSelectedListener() {
 
-                    @Override
-                    public void onColorSelected(int color) {
-                        Log.i(TAG, "CP my vybrata farba: " + color);
+                if (checkNumber(eTextPosition.getText().toString()) && checkColor(eText.getText().toString())){
+                    ColorPickerDialog colorPickerDialog = new ColorPickerDialog(skuska, Integer.parseInt(eText.getText().toString(), 16) + 0xFF000000, new ColorPickerDialog.OnColorSelectedListener() {
 
-                        //CONTENT
-                        Intent i = new Intent();
-                        i.putExtra("picked", Integer.toHexString(color).substring(2));
-                        i.putExtra("pickedGradientPostion",eTextPosition.getText().toString());
-                        setResult(RESULT_OK, i);
+                        @Override
+                        public void onColorSelected(int color) {
+                            Log.i(TAG, "CP my vybrata farba: " + color);
 
-                        finish();
-                    }
+                            //CONTENT
+                            Intent i = new Intent();
+                            i.putExtra("picked", Integer.toHexString(color).substring(2));
+                            i.putExtra("pickedGradientPostion",eTextPosition.getText().toString());
+                            setResult(RESULT_OK, i);
 
-                });
-                colorPickerDialog.show();
+                            finish();
+                        }
+
+                    });
+                    colorPickerDialog.show();
+                }
+
             }
         });
 
+    }
+
+    boolean checkNumber(String text){
+        Log.i(TAG,"CP "+text+" is what ?");
+        try {
+            int num = Integer.parseInt(text);
+            Log.i(TAG,"CP "+num+" is a number");
+
+            if (num >=0 && num <=100)
+                return true;
+            else {
+                Toast.makeText(getApplicationContext(), text+": NUMBER not between 0 and 100", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        } catch (NumberFormatException e) {
+            Toast.makeText(getApplicationContext(), text+": is not a NUMBER 0 - 100", Toast.LENGTH_SHORT).show();
+            Log.i(TAG,"CP "+text+" is not a number");
+            return false;
+        }
+    }
+
+    boolean checkColor(String text){
+
+        if ((text.matches("[a-fA-F0-9]+")) && text.length() == 6) {
+            return true;
+        }
+        else{
+            Toast.makeText(getApplicationContext(), text+": is not a COLOR", Toast.LENGTH_SHORT).show();
+            return false;
+        }
     }
 }

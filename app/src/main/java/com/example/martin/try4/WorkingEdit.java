@@ -226,8 +226,6 @@ public class WorkingEdit extends AppCompatActivity {
         numColors = arrayList.size();
         arrColors = new int[numColors];
 
-        //scale = (float) 1/(numColors-1);
-        //Log.i(TAG, "WE scale: " + scale);
         Log.i(TAG, "WE numColors: " + numColors);
 
         if (numColors>1){

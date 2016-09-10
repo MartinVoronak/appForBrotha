@@ -128,6 +128,7 @@ public class SingleProfile extends AppCompatActivity {
 
                 Intent i = new Intent(SingleProfile.this, ColorPicker_try1.class);
                 i.putExtra("objectColor", "ffffff");
+                i.putExtra("decision",true);
                 startActivityForResult(i, REQ_CODE_NEW); //RCN == 1
             }
         });
