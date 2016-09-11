@@ -39,7 +39,7 @@ public class PairDevice extends AppCompatActivity {
         bluetooth = BluetoothAdapter.getDefaultAdapter();
         setBluetooth(true);
 
-        bluetooth.setName("Vori Xiaomi");
+        bluetooth.setName(bluetooth.getName());
         if (bluetooth.isEnabled()) {
 
             setBluetooth(true);

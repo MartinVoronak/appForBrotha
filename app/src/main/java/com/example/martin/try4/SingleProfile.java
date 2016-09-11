@@ -22,12 +22,18 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class SingleProfile extends AppCompatActivity {
 
@@ -190,7 +196,7 @@ public class SingleProfile extends AppCompatActivity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {     //TODO sorting added color in wrong order
         Log.i(TAG, "-------------------------------------- SP ONRESULT --------------------------------------");
 
         switch(requestCode){
@@ -207,8 +213,14 @@ public class SingleProfile extends AppCompatActivity {
                         pickedGradientPosition = 0;
                     }
 
+                    /*
                     arrayList.add(pickedColor);
                     floatArrayGradient.add(pickedGradientPosition);
+                    */
+
+                    //call sort1
+                    sortOrder();
+
                     list.setAdapter(cAdapter);
 
                 }else if(resultCode == RESULT_CANCELED){
@@ -219,11 +231,15 @@ public class SingleProfile extends AppCompatActivity {
             case 2:
                 if (resultCode == RESULT_OK) {
 
-                    //TODO changing colors is buggy
                     pickedColor = data.getStringExtra("picked");
                     pickedGradientPosition = (float) Float.parseFloat(data.getStringExtra("pickedGradientPostion"))/100;
+
+                    /*
                     arrayList.set(pickedPosition, pickedColor);
                     floatArrayGradient.set(pickedPosition,pickedGradientPosition);
+                    */
+                    sortOrderColorExists();
+
                     list.setAdapter(cAdapter);
 
                     Log.i(TAG, "zmena farby na poz: " + pickedPosition);
@@ -409,5 +425,68 @@ public class SingleProfile extends AppCompatActivity {
             }
         }
         finish();
+    }
+
+    void sortOrder(){
+        Log.i(TAG,"WE arraylist size: "+arrayList.size());
+
+        if (arrayList.isEmpty()){
+            floatArrayGradient.add(pickedGradientPosition);
+            arrayList.add(pickedColor);
+        }
+        else if (floatArrayGradient.contains(pickedGradientPosition)){
+            //toast could not add a color, since it has same position as another
+            Toast.makeText(getApplicationContext(), "Color at that position already exists !", Toast.LENGTH_LONG).show();
+        }
+        else {
+            floatArrayGradient.add(pickedGradientPosition);
+            arrayList.add(pickedColor);
+            concurrentSort(floatArrayGradient,floatArrayGradient,arrayList);
+        }
+    }
+
+    void sortOrderColorExists(){        //0_A 20_B 50_C 100_D
+        arrayList.remove(pickedPosition);
+        floatArrayGradient.remove(pickedPosition);
+        floatArrayGradient.add(pickedGradientPosition);
+        arrayList.add(pickedColor);
+
+        concurrentSort(floatArrayGradient,floatArrayGradient,arrayList);
+    }
+
+    public static <T extends Comparable<T>> void concurrentSort(
+            final List<T> key, List<?>... lists){
+        // Create a List of indices
+        List<Integer> indices = new ArrayList<Integer>();
+        for(int i = 0; i < key.size(); i++)
+            indices.add(i);
+
+        // Sort the indices list based on the key
+        Collections.sort(indices, new Comparator<Integer>() {
+            @Override
+            public int compare(Integer i, Integer j) {
+                return key.get(i).compareTo(key.get(j));
+            }
+        });
+
+        // Create a mapping that allows sorting of the List by N swaps.
+        // Only swaps can be used since we do not know the type of the lists
+        Map<Integer,Integer> swapMap = new HashMap<Integer, Integer>(indices.size());
+        List<Integer> swapFrom = new ArrayList<Integer>(indices.size()),
+                swapTo   = new ArrayList<Integer>(indices.size());
+        for(int i = 0; i < key.size(); i++){
+            int k = indices.get(i);
+            while(i != k && swapMap.containsKey(k))
+                k = swapMap.get(k);
+
+            swapFrom.add(i);
+            swapTo.add(k);
+            swapMap.put(i, k);
+        }
+
+        // use the swap order to sort each list by swapping elements
+        for(List<?> list : lists)
+            for(int i = 0; i < list.size(); i++)
+                Collections.swap(list, swapFrom.get(i), swapTo.get(i));
     }
 }

@@ -27,5 +27,4 @@ public class Profile implements Serializable {
     public ArrayList<Float> getGradients() {
         return gradients;
     }
-
 }
