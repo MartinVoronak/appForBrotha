@@ -180,24 +180,15 @@ public class WorkingEdit extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        switch(requestCode){        //new color
-            case 1:
+        switch(requestCode){
+            case 1:     //new color
 
                 if (resultCode == RESULT_OK){
                     pickedColor = data.getStringExtra("picked");
 
-                    if (arrayList.size()!=0) {
-                        pickedGradientPosition = (float) Float.parseFloat(data.getStringExtra("pickedGradientPostion")) / 100;
-                        Log.i(TAG, "WE prenesena farba a pozicia: " + pickedColor +" "+pickedGradientPosition);
-                    }
-                    else {
-                        pickedGradientPosition = 0;         //TODO check this do we need this ?     //might crash if someone picks 2 times 0 ??
-                    }
+                    pickedGradientPosition = (float) Float.parseFloat(data.getStringExtra("pickedGradientPostion")) / 100;
+                    Log.i(TAG, "WE prenesena farba a pozicia: " + pickedColor +" "+pickedGradientPosition);
 
-                    /*
-                    arrayList.add(pickedColor);
-                    floatArrayGradient.add(pickedGradientPosition);
-                    */
                     sortOrder();
                     list.setAdapter(cAdapter);
 
@@ -210,15 +201,15 @@ public class WorkingEdit extends AppCompatActivity {
                 if (resultCode == RESULT_OK) {
                     pickedColor = data.getStringExtra("picked");
                     pickedGradientPosition = (float) Float.parseFloat(data.getStringExtra("pickedGradientPostion"))/100;
-                    /*
-                    arrayList.set(pickedPosition, pickedColor);
-                    floatArrayGradient.set(pickedPosition,pickedGradientPosition);
-                    */
+
                     sortOrderColorExists();
                     list.setAdapter(cAdapter);
 
                     Log.i(TAG, "zmena farby na poz: " + pickedPosition);
+                }else if(resultCode == RESULT_CANCELED){
+                    Log.i(TAG,"WE nepreniesla sa farba");
                 }
+
                 break;
         }
 
@@ -236,47 +227,169 @@ public class WorkingEdit extends AppCompatActivity {
 
     public void setGradient(){
         numColors = arrayList.size();
-        arrColors = new int[numColors];
+
 
         Log.i(TAG, "WE numColors: " + numColors);
 
         if (numColors>1){
+            if (floatArrayGradient.get(0) != 0 && floatArrayGradient.get(floatArrayGradient.size()-1)==1){
+                Log.i(TAG, "WE in condition not 0 and 100: " + numColors);
 
-            result = new float[numColors];
-            for (int i = 0; i < numColors; i++) {
-                result[i] =(float) floatArrayGradient.get(i).floatValue();
-                Log.i(TAG,"WE gradient position: "+result[i]);
-            }
+                arrColors = new int[numColors+1];
+                result = new float[numColors+1];
 
-            result[numColors-1] = 1;
-
-            for (int j=0;j<numColors;j++){
-                arrColors[j] = Integer.parseInt(arrayList.get(j).toString(), 16)+0xFF000000;
-                Log.i(TAG,"WE farby :" +arrColors[j]);
-            }
-
-            ShapeDrawable.ShaderFactory shaderFactory = new ShapeDrawable.ShaderFactory() {
-                @Override
-                public Shader resize(int width, int height) {
-                    LinearGradient linearGradient = new LinearGradient(0, 0, width, height,
-                            arrColors, //pouzity array farieb
-                            result,
-                            Shader.TileMode.REPEAT);
-                    return linearGradient;
+                result[0] =(float) 0;
+                for (int i = 0; i < numColors; i++) {
+                    result[i+1] =(float) floatArrayGradient.get(i).floatValue();
                 }
-            };
-            paint = new PaintDrawable();
-            paint.setShape(new RectShape());
-            paint.setShaderFactory(shaderFactory);
 
-            layout = findViewById(R.id.gradientAddProfile);
-            layout.setBackgroundDrawable((Drawable) paint);
-        }
-        else if (numColors==1){
+                arrColors[0] = Integer.parseInt(arrayList.get(0).toString(), 16)+0xFF000000;
+                for (int j=0;j<numColors;j++){
+                    arrColors[j+1] = Integer.parseInt(arrayList.get(j).toString(), 16)+0xFF000000;
+                }
 
-            layout = findViewById(R.id.gradientAddProfile);
-            layout.setBackgroundColor(Integer.parseInt(arrayList.get(0).toString(), 16)+0xFF000000);
-        }
+                for (int j=0;j<numColors+1;j++) {
+                    Log.i(TAG, "WE farby :" + arrColors[j]);
+                    Log.i(TAG,"WE gradient position: "+result[j]);
+                }
+
+                ShapeDrawable.ShaderFactory shaderFactory = new ShapeDrawable.ShaderFactory() {
+                    @Override
+                    public Shader resize(int width, int height) {
+                        LinearGradient linearGradient = new LinearGradient(0, 0, width, height,
+                                arrColors, //pouzity array farieb
+                                result,
+                                Shader.TileMode.REPEAT);
+                        return linearGradient;
+                    }
+                };
+                paint = new PaintDrawable();
+                paint.setShape(new RectShape());
+                paint.setShaderFactory(shaderFactory);
+
+                layout = findViewById(R.id.gradientAddProfile);
+                layout.setBackgroundDrawable((Drawable) paint);
+            }
+            else if (floatArrayGradient.get(0) == 0 && floatArrayGradient.get(floatArrayGradient.size()-1)!=1){
+                    Log.i(TAG, "WE in condition not 0 and 100: " + numColors);
+
+                    arrColors = new int[numColors+1];
+                    result = new float[numColors+1];
+
+                    for (int i = 0; i < numColors; i++) {
+                        result[i] =(float) floatArrayGradient.get(i).floatValue();
+                    }
+                    result[numColors] =(float) 1;
+
+                    for (int j=0;j<numColors;j++){
+                        arrColors[j] = Integer.parseInt(arrayList.get(j).toString(), 16)+0xFF000000;
+                    }
+                    arrColors[numColors] = Integer.parseInt(arrayList.get(numColors-1).toString(), 16)+0xFF000000;
+
+                    for (int j=0;j<numColors+1;j++) {
+                        Log.i(TAG, "WE farby :" + arrColors[j]);
+                        Log.i(TAG,"WE gradient position: "+result[j]);
+                    }
+
+                    ShapeDrawable.ShaderFactory shaderFactory = new ShapeDrawable.ShaderFactory() {
+                        @Override
+                        public Shader resize(int width, int height) {
+                            LinearGradient linearGradient = new LinearGradient(0, 0, width, height,
+                                    arrColors, //pouzity array farieb
+                                    result,
+                                    Shader.TileMode.REPEAT);
+                            return linearGradient;
+                        }
+                    };
+                    paint = new PaintDrawable();
+                    paint.setShape(new RectShape());
+                    paint.setShaderFactory(shaderFactory);
+
+                    layout = findViewById(R.id.gradientAddProfile);
+                    layout.setBackgroundDrawable((Drawable) paint);
+                }
+            else if (floatArrayGradient.get(0) != 0 && floatArrayGradient.get(numColors-1) != 1){
+
+                Log.i(TAG, "WE in condition not 0 and 100: " + numColors);
+
+                arrColors = new int[numColors+2];
+                result = new float[numColors+2];
+
+                    result[0] =(float) 0;
+                    for (int i = 0; i < numColors; i++) {
+                        result[i+1] =(float) floatArrayGradient.get(i).floatValue();
+                    }
+                    result[numColors+1] = 1;
+
+
+                    arrColors[0] = Integer.parseInt(arrayList.get(0).toString(), 16)+0xFF000000;
+                    for (int j=0;j<numColors;j++){
+                        arrColors[j+1] = Integer.parseInt(arrayList.get(j).toString(), 16)+0xFF000000;
+                    }
+                    arrColors[numColors+1] = Integer.parseInt(arrayList.get(numColors-1).toString(), 16)+0xFF000000;
+
+                for (int j=0;j<numColors+2;j++) {
+                    Log.i(TAG, "WE farby :" + arrColors[j]);
+                    Log.i(TAG,"WE gradient position: "+result[j]);
+                }
+
+                ShapeDrawable.ShaderFactory shaderFactory = new ShapeDrawable.ShaderFactory() {
+                    @Override
+                    public Shader resize(int width, int height) {
+                        LinearGradient linearGradient = new LinearGradient(0, 0, width, height,
+                                arrColors, //pouzity array farieb
+                                result,
+                                Shader.TileMode.REPEAT);
+                        return linearGradient;
+                    }
+                };
+                paint = new PaintDrawable();
+                paint.setShape(new RectShape());
+                paint.setShaderFactory(shaderFactory);
+
+                layout = findViewById(R.id.gradientAddProfile);
+                layout.setBackgroundDrawable((Drawable) paint);
+                }
+            else {
+                arrColors = new int[numColors];
+                result = new float[numColors];
+
+                for (int i = 0; i < numColors; i++) {
+
+                    result[i] =(float) floatArrayGradient.get(i).floatValue();
+                    Log.i(TAG,"SP gradient position: "+result[i]);
+                }
+
+                //result[numColors-1] = 1;
+
+                for (int j=0;j<numColors;j++){
+
+                    arrColors[j] = Integer.parseInt(arrayList.get(j).toString(), 16)+0xFF000000;
+                    Log.i(TAG,"SP farby :" +arrColors[j]);
+                }
+
+                ShapeDrawable.ShaderFactory shaderFactory = new ShapeDrawable.ShaderFactory() {
+                    @Override
+                    public Shader resize(int width, int height) {
+                        LinearGradient linearGradient = new LinearGradient(0, 0, width, height,
+                                arrColors, //pouzity array farieb
+                                result,
+                                Shader.TileMode.REPEAT);
+                        return linearGradient;
+                    }
+                };
+                paint = new PaintDrawable();
+                paint.setShape(new RectShape());
+                paint.setShaderFactory(shaderFactory);
+
+                layout = findViewById(R.id.gradientAddProfile);
+                layout.setBackgroundDrawable((Drawable) paint);
+                }
+            }
+        else {
+                layout = findViewById(R.id.gradientAddProfile);
+                layout.setBackgroundColor(Integer.parseInt(arrayList.get(0).toString(), 16)+0xFF000000);
+            }
     }
 
     private AlertDialog AskOption()

@@ -64,57 +64,155 @@ public class CustomListAdapter extends BaseAdapter {
 
 
         int numColors = currentItem.getArrayList().size();
-
+        final int[] arrColors;
+        final float [] result;
 
         if (numColors > 1) {
+            if (currentItem.getGradients().get(0) != 0 && currentItem.getGradients().get(currentItem.getGradients().size()-1)==1){
 
-            int[] arrColors = new int[numColors];
+                arrColors = new int[numColors+1];
+                result = new float[numColors+1];
 
-            //positions of colors defined by user
-            final float[] result = new float[numColors];
-            for (int a = 0; a < numColors; a++) {
-                result[a] = (float) currentItem.getGradients().get(a);
-            }
-
-            //make sure user didnt write error values (not fixed yet)
-            result[0] = 0;
-            result[numColors - 1] = 1;
-
-            //colors
-            for (int j = 0; j < numColors; j++) {
-                arrColors[j] = Integer.parseInt(currentItem.getArrayList().get(j).toString(), 16) + 0xFF000000;
-            }
-
-            final int[] finalArrColors = arrColors;
-
-            ShapeDrawable.ShaderFactory shaderFactory = new ShapeDrawable.ShaderFactory() {
-                @Override
-                public Shader resize(int width, int height) {
-                    LinearGradient linearGradient = new LinearGradient(0, 0, width, height,
-                            finalArrColors, //pouzity array farieb
-                            result,
-                            Shader.TileMode.REPEAT);
-                    return linearGradient;
+                result[0] =(float) 0;
+                for (int i = 0; i < numColors; i++) {
+                    result[i+1] =(float) currentItem.getGradients().get(i).floatValue();
                 }
-            };
-            PaintDrawable paint = new PaintDrawable();
-            paint.setShape(new RectShape());
-            paint.setShaderFactory(shaderFactory);
 
-            paint.setCornerRadius(100);
+                arrColors[0] = Integer.parseInt(currentItem.getArrayList().get(0).toString(), 16)+0xFF000000;
+                for (int j=0;j<numColors;j++){
+                    arrColors[j+1] = Integer.parseInt(currentItem.getArrayList().get(j).toString(), 16)+0xFF000000;
+                }
 
-            viewHolder.itemName.setBackgroundDrawable(paint);
+                ShapeDrawable.ShaderFactory shaderFactory = new ShapeDrawable.ShaderFactory() {
+                    @Override
+                    public Shader resize(int width, int height) {
+                        LinearGradient linearGradient = new LinearGradient(0, 0, width, height,
+                                arrColors, //pouzity array farieb
+                                result,
+                                Shader.TileMode.REPEAT);
+                        return linearGradient;
+                    }
+                };
+                PaintDrawable paint = new PaintDrawable();
+                paint.setShape(new RectShape());
+                paint.setShaderFactory(shaderFactory);
+
+                paint.setCornerRadius(100);
+
+                viewHolder.itemName.setBackgroundDrawable(paint);
+            }
+            else if (currentItem.getGradients().get(0) == 0 && currentItem.getGradients().get(currentItem.getGradients().size()-1)!=1){
+
+                arrColors = new int[numColors+1];
+                result = new float[numColors+1];
+
+                for (int i = 0; i < numColors; i++) {
+                    result[i] =(float) currentItem.getGradients().get(i).floatValue();
+                }
+                result[numColors] =(float) 1;
+
+                for (int j=0;j<numColors;j++){
+                    arrColors[j] = Integer.parseInt(currentItem.getArrayList().get(j).toString(), 16)+0xFF000000;
+                }
+                arrColors[numColors] = Integer.parseInt(currentItem.getArrayList().get(numColors-1).toString(), 16)+0xFF000000;
+
+                ShapeDrawable.ShaderFactory shaderFactory = new ShapeDrawable.ShaderFactory() {
+                    @Override
+                    public Shader resize(int width, int height) {
+                        LinearGradient linearGradient = new LinearGradient(0, 0, width, height,
+                                arrColors, //pouzity array farieb
+                                result,
+                                Shader.TileMode.REPEAT);
+                        return linearGradient;
+                    }
+                };
+                PaintDrawable paint = new PaintDrawable();
+                paint.setShape(new RectShape());
+                paint.setShaderFactory(shaderFactory);
+
+                paint.setCornerRadius(100);
+
+                viewHolder.itemName.setBackgroundDrawable(paint);
+            }
+            else if (currentItem.getGradients().get(0) != 0 && currentItem.getGradients().get(numColors-1) != 1){
+
+                arrColors = new int[numColors+2];
+                result = new float[numColors+2];
+
+                result[0] =(float) 0;
+                for (int i = 0; i < numColors; i++) {
+                    result[i+1] =(float) currentItem.getGradients().get(i).floatValue();
+                }
+                result[numColors+1] = 1;
+
+
+                arrColors[0] = Integer.parseInt(currentItem.getArrayList().get(0).toString(), 16)+0xFF000000;
+                for (int j=0;j<numColors;j++){
+                    arrColors[j+1] = Integer.parseInt(currentItem.getArrayList().get(j).toString(), 16)+0xFF000000;
+                }
+                arrColors[numColors+1] = Integer.parseInt(currentItem.getArrayList().get(numColors-1).toString(), 16)+0xFF000000;
+
+                ShapeDrawable.ShaderFactory shaderFactory = new ShapeDrawable.ShaderFactory() {
+                    @Override
+                    public Shader resize(int width, int height) {
+                        LinearGradient linearGradient = new LinearGradient(0, 0, width, height,
+                                arrColors, //pouzity array farieb
+                                result,
+                                Shader.TileMode.REPEAT);
+                        return linearGradient;
+                    }
+                };
+                PaintDrawable paint = new PaintDrawable();
+                paint.setShape(new RectShape());
+                paint.setShaderFactory(shaderFactory);
+
+                paint.setCornerRadius(100);
+
+                viewHolder.itemName.setBackgroundDrawable(paint);
+            }
+            else {
+                arrColors = new int[numColors];
+                result = new float[numColors];
+
+                for (int i = 0; i < numColors; i++) {
+
+                    result[i] =(float) currentItem.getGradients().get(i).floatValue();
+                }
+
+                //result[numColors-1] = 1;
+
+                for (int j=0;j<numColors;j++){
+
+                    arrColors[j] = Integer.parseInt(currentItem.getArrayList().get(j).toString(), 16)+0xFF000000;
+                }
+
+                ShapeDrawable.ShaderFactory shaderFactory = new ShapeDrawable.ShaderFactory() {
+                    @Override
+                    public Shader resize(int width, int height) {
+                        LinearGradient linearGradient = new LinearGradient(0, 0, width, height,
+                                arrColors, //pouzity array farieb
+                                result,
+                                Shader.TileMode.REPEAT);
+                        return linearGradient;
+                    }
+                };
+
+                PaintDrawable paint = new PaintDrawable();
+                paint.setShape(new RectShape());
+                paint.setShaderFactory(shaderFactory);
+
+                paint.setCornerRadius(100);
+
+                viewHolder.itemName.setBackgroundDrawable(paint);
+            }
         }
         else if (numColors == 1) {
 
-            int[] arrColors = new int[2];
+            arrColors = new int[2];
             arrColors[0] = Integer.parseInt(currentItem.getArrayList().get(0).toString(), 16) + 0xFF000000;
             arrColors[1] = Integer.parseInt(currentItem.getArrayList().get(0).toString(), 16) + 0xFF000000;
 
-
-            //float[] result = new float[numColors];
-
-            float[] result = new float[2];
+            result = new float[2];
             result[0]=0;
             result[1]=1;
 

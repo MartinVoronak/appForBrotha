@@ -26,6 +26,8 @@ public class CustomAdapter extends ArrayAdapter<ArrayList<String>> {
         View customView = listInflater.inflate(R.layout.customrow2, parent, false);
 
         String itemText = myArrayList.get(position);
+
+
         TextView singeItem = (TextView) customView.findViewById(R.id.profileColorName);
         TextView  profileColor = (TextView) customView.findViewById(R.id.profileColorPreview);
 
